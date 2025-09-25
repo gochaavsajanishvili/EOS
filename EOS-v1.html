@@ -66,7 +66,19 @@
             <button id="menu-button" class="fixed top-1/2 -translate-y-1/2 left-0 z-40 bg-indigo-600 text-white w-8 h-16 flex items-center justify-center rounded-r-lg focus:outline-none shadow-lg md:hidden">
                  <svg id="menu-button-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><path d="m9 18 6-6-6-6"/></svg>
             </button>
-            <header class="flex justify-end items-center p-4 bg-gray-900 border-b border-gray-800">
+            <header class="flex justify-between items-center p-4 bg-gray-900 border-b border-gray-800">
+                <div class="flex items-center space-x-4">
+                    <button id="refresh-btn" onclick="App.manualRefresh()" class="text-gray-400 hover:text-white transition-colors" title="Manual Refresh">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/></svg>
+                    </button>
+                    <div class="text-xs text-gray-500">
+                        <span class="flex items-center">
+                            <svg class="w-3 h-3 mr-1 text-green-400 animate-pulse" fill="currentColor" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3"/></svg>
+                            Live Updates Active
+                        </span>
+                        <span id="last-update" class="text-gray-600">Last: Just now</span>
+                    </div>
+                </div>
                  <div class="flex items-center space-x-4">
                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
                      <div class="flex items-center">
@@ -88,9 +100,240 @@
         </div>
     </div>
 
+    <!-- Rock Modal -->
+    <div id="rock-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-700">
+                <h3 id="rock-modal-title" class="text-xl font-bold text-white">Add Rock</h3>
+            </div>
+            <form id="rock-form" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Rock Name *</label>
+                    <input type="text" name="rock-name" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Type *</label>
+                    <select name="rock-type" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:outline-none">
+                        <option value="company">Company</option>
+                        <option value="department">Department</option>
+                        <option value="individual">Individual</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Owner</label>
+                    <input type="text" name="rock-owner" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Department</label>
+                    <select name="rock-department" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:outline-none">
+                        <option value="">Select Department</option>
+                        <option value="engineering">Engineering</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="sales">Sales</option>
+                        <option value="product">Product</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Status</label>
+                    <select name="rock-status" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:outline-none">
+                        <option value="On Track">On Track</option>
+                        <option value="Off Track">Off Track</option>
+                        <option value="Done">Done</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Due Date</label>
+                    <input type="date" name="rock-due" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Notes</label>
+                    <textarea name="rock-notes" rows="3" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:outline-none"></textarea>
+                </div>
+            </form>
+            <div class="p-6 border-t border-gray-700 flex justify-between">
+                <button id="delete-rock-btn" class="hidden px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500">Delete</button>
+                <div class="ml-auto space-x-3">
+                    <button id="cancel-rock-btn" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">Cancel</button>
+                    <button id="save-rock-btn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Metric Modal -->
+    <div id="metric-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-lg max-w-md w-full">
+            <div class="p-6 border-b border-gray-700">
+                <h3 id="metric-modal-title" class="text-xl font-bold text-white">Add Metric</h3>
+            </div>
+            <form id="metric-form" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Metric Name *</label>
+                    <input type="text" name="metric-name" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Goal</label>
+                    <input type="text" name="metric-goal" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:outline-none" placeholder="e.g., 95%, $100k, <2hrs">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Current Value</label>
+                    <input type="text" name="metric-value" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Type</label>
+                    <select name="metric-type" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:outline-none">
+                        <option value="company">Company Scorecard</option>
+                        <option value="department">Department Scorecard</option>
+                    </select>
+                </div>
+                <div id="metric-department-select" class="hidden">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Department</label>
+                    <select name="metric-department" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:outline-none">
+                        <option value="">Select Department</option>
+                        <option value="engineering">Engineering</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="sales">Sales</option>
+                        <option value="product">Product</option>
+                    </select>
+                </div>
+            </form>
+            <div class="p-6 border-t border-gray-700 flex justify-between">
+                <button id="delete-metric-btn" class="hidden px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500">Delete</button>
+                <div class="ml-auto space-x-3">
+                    <button id="cancel-metric-btn" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">Cancel</button>
+                    <button id="save-metric-btn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Chat Bot -->
+    <div id="ai-chat-button" class="fixed bottom-6 right-6 z-40">
+        <button id="open-ai-chat" class="bg-indigo-600 hover:bg-indigo-500 text-white p-4 rounded-full shadow-lg flex items-center space-x-2">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="hidden lg:inline">AI Assistant</span>
+            <div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+        </button>
+    </div>
+
+    <!-- AI Chat Modal -->
+    <div id="ai-chat-modal" class="hidden fixed bottom-24 right-6 w-96 h-[600px] bg-gray-800 rounded-lg shadow-2xl z-50 flex flex-col">
+        <div class="p-4 border-b border-gray-700 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <h3 class="font-bold text-white">EOS AI Assistant</h3>
+            </div>
+            <button id="close-ai-chat" class="text-gray-400 hover:text-white">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+
+        <div id="ai-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3">
+            <div class="flex items-start space-x-2">
+                <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path>
+                    </svg>
+                </div>
+                <div class="flex-1 bg-gray-700 rounded-lg p-3">
+                    <p class="text-sm text-gray-300">Hello! I'm your EOS AI Assistant. I can help you analyze meetings, track rocks, and provide insights. How can I help you today?</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-700 p-4">
+            <div class="flex space-x-2 mb-3">
+                <button class="ai-quick-action flex-1 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-2 py-1 rounded" data-action="analyze-meeting">Analyze Last Meeting</button>
+                <button class="ai-quick-action flex-1 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-2 py-1 rounded" data-action="off-track">Show Off-Track</button>
+                <button class="ai-quick-action flex-1 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-2 py-1 rounded" data-action="weekly-report">Weekly Report</button>
+            </div>
+            <div class="flex space-x-2">
+                <input id="ai-chat-input" type="text" class="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:border-indigo-500 focus:outline-none" placeholder="Ask me anything...">
+                <button id="ai-send-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Employee Modal -->
+    <div id="employee-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-lg max-w-md w-full">
+            <div class="p-6 border-b border-gray-700">
+                <h3 id="employee-modal-title" class="text-xl font-bold text-white">Add Employee</h3>
+            </div>
+            <form id="employee-form" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Name *</label>
+                    <input type="text" name="employee-name" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Role</label>
+                    <input type="text" name="employee-role" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Department</label>
+                    <select name="employee-department" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:outline-none">
+                        <option value="">Select Department</option>
+                        <option value="engineering">Engineering</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="sales">Sales</option>
+                        <option value="product">Product</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                    <input type="email" name="employee-email" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:outline-none">
+                </div>
+            </form>
+            <div class="p-6 border-t border-gray-700 flex justify-between">
+                <button id="delete-employee-btn" class="hidden px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500">Delete</button>
+                <div class="ml-auto space-x-3">
+                    <button id="cancel-employee-btn" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">Cancel</button>
+                    <button id="save-employee-btn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // --- UTILITIES & HELPERS ---
+        const Security = {
+            escapeHtml(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            },
+            sanitizeInput(str) {
+                return str?.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+                    .replace(/on\w+\s*=/gi, '')
+                    .trim() || '';
+            }
+        };
+
         const UI = {
+            showLoading(message = 'Loading...') {
+                const loader = document.createElement('div');
+                loader.id = 'loading-indicator';
+                loader.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+                loader.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                        <span>${Security.escapeHtml(message)}</span>
+                    </div>
+                `;
+                document.body.appendChild(loader);
+            },
+            hideLoading() {
+                const loader = document.getElementById('loading-indicator');
+                if (loader) loader.remove();
+            },
             showModal({ title, contentHTML, onSubmit, submitText = 'Submit' }) {
                 const modalContainer = document.getElementById('modal-container');
                 const modalHTML = `
@@ -148,6 +391,7 @@
             issues: () => `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>`,
             rocks: () => `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.48 3.48a2 2 0 0 1 2.04 0l6 3.5A2 2 0 0 1 21 8.66v6.68a2 2 0 0 1-1.48 1.93l-6 3.5a2 2 0 0 1-2.04 0l-6-3.5A2 2 0 0 1 3 15.34V8.66a2 2 0 0 1 1.48-1.93l6-3.5Z"/><path d="m3.5 8.5 8.5 5 8.5-5"/><path d="M12 22V13.5"/></svg>`,
             meetings: () => `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v5Z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>`,
+            integrations: () => `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/></svg>`,
             ai: () => `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>`,
             plus: () => `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>`,
             trash: () => `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>`,
@@ -183,7 +427,12 @@
 
         const App = {
             data: {},
-            
+            lastUpdateTime: new Date(),
+            autoRefreshInterval: null,
+            webhookSimulationInterval: null,
+            _charts: [], // Track chart instances
+            currentL10Department: null, // Track L10 meeting department
+
             getWeekId(date = new Date()) {
                 const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
                 const dayNum = d.getUTCDay() || 7;
@@ -193,6 +442,72 @@
                 return `${d.getUTCFullYear()}-${String(weekNo).padStart(2, '0')}`;
             },
 
+            simulateWebhookUpdate() {
+                const changes = ['scorecard', 'rocks', 'issues'];
+                const change = changes[Math.floor(Math.random() * changes.length)];
+
+                if (change === 'scorecard' && this.data.scorecard.length > 0) {
+                    const idx = Math.floor(Math.random() * this.data.scorecard.length);
+                    const oldValue = parseFloat(this.data.scorecard[idx].value) || 0;
+                    const variation = (Math.random() - 0.5) * 10;
+                    this.data.scorecard[idx].value = Math.round(oldValue + variation).toString();
+                }
+
+                this.lastUpdateTime = new Date();
+                this.updateTimestamp();
+                Persistence.save(this.data);
+                this.showUpdateNotification(change);
+
+                if (window.location.hash === '#dashboard' || window.location.hash === '') {
+                    this.render('dashboard');
+                }
+            },
+
+            updateTimestamp() {
+                const el = document.getElementById('last-update');
+                if (el) {
+                    const now = new Date();
+                    const diff = Math.floor((now - this.lastUpdateTime) / 1000);
+                    let text = 'Just now';
+                    if (diff > 60) text = `${Math.floor(diff / 60)}m ago`;
+                    if (diff > 3600) text = `${Math.floor(diff / 3600)}h ago`;
+                    el.textContent = `Last: ${text}`;
+                }
+            },
+
+            showUpdateNotification(type) {
+                const notification = document.createElement('div');
+                notification.className = 'fixed bottom-20 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-40 animate-pulse transition-opacity duration-500';
+                notification.innerHTML = `<span class="flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>Live update: ${type} data refreshed</span>`;
+                document.body.appendChild(notification);
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => notification.remove(), 500);
+                }, 2500);
+            },
+
+            startAutoRefresh() {
+                this.autoRefreshInterval = setInterval(() => {
+                    this.simulateWebhookUpdate();
+                }, 15 * 60 * 1000);
+
+                this.webhookSimulationInterval = setInterval(() => {
+                    if (Math.random() > 0.7) {
+                        this.simulateWebhookUpdate();
+                    }
+                }, 30000);
+            },
+
+            manualRefresh() {
+                this.simulateWebhookUpdate();
+                this.updateTimestamp();
+                const btn = document.getElementById('refresh-btn');
+                if (btn) {
+                    btn.classList.add('animate-spin');
+                    setTimeout(() => btn.classList.remove('animate-spin'), 1000);
+                }
+            },
+
             init() {
                 const loadedState = Persistence.load();
                 if (loadedState) {
@@ -200,6 +515,21 @@
                 } else {
                     this.data = {
                         companyName: "Zuma",
+                        employees: [
+                            { id: 'emp1', name: 'Asfand Yaar', role: 'Visionary/Integrator', department: 'leadership' },
+                            { id: 'emp2', name: 'Gocha Avsajanishvili', role: 'Tech Lead', department: 'technology' },
+                            { id: 'emp3', name: 'Prince Ezra', role: 'Senior Developer', department: 'technology' },
+                            { id: 'emp4', name: 'Akash', role: 'Developer', department: 'technology' },
+                            { id: 'emp5', name: 'Saeed Ahmed', role: 'Developer', department: 'technology' },
+                            { id: 'emp6', name: 'JC Vergara', role: 'QA Engineer', department: 'technology' },
+                            { id: 'emp7', name: 'Hamza Khan', role: 'Marketing Head', department: 'marketing' },
+                            { id: 'emp8', name: 'Sarah Chen', role: 'UX Designer', department: 'marketing' },
+                            { id: 'emp9', name: 'Mike Johnson', role: 'SEO Writer', department: 'marketing' },
+                            { id: 'emp10', name: 'Lisa Park', role: 'Ads Specialist', department: 'marketing' },
+                            { id: 'emp11', name: 'John Smith', role: 'Sales Lead', department: 'operations' },
+                            { id: 'emp12', name: 'Maria Garcia', role: 'Repair Manager', department: 'operations' },
+                            { id: 'emp13', name: 'Tom Wilson', role: 'Shipping Coordinator', department: 'operations' }
+                        ],
                         vto: {
                             coreValues: ["Customer First", "Innovate & Simplify", "Own It", "Get It Done Right", "Team Player"],
                             coreFocus: { purpose: "To be the most trusted and efficient online source for aerial lift equipment and parts.", niche: "Providing high-quality used aerial lifts and parts with exceptional digital experience." },
@@ -214,27 +544,110 @@
                             { metric: "Machines Inspected (TIP)", goal: "25", value: "28", trend: [22, 24, 26, 28] },
                             { metric: "Website Leads (zuma.ca)", goal: "100", value: "110", trend: [95, 105, 98, 110] },
                             { metric: "Customer Satisfaction (CSAT %)", goal: "95", value: "96", trend: [94, 95, 96, 96] },
+                            { metric: "Invoice Processing Time (hrs)", goal: "2", value: "1.5", trend: [2.5, 2.1, 1.8, 1.5] },
                         ],
+                        departmentalScorecards: {
+                            technology: [
+                                { metric: "ULP Uptime %", goal: "99.9", value: "99.95", trend: [99.8, 99.9, 99.92, 99.95] },
+                                { metric: "Avg Page Load (s)", goal: "1.5", value: "1.2", trend: [1.6, 1.4, 1.3, 1.2] },
+                                { metric: "Bugs Closed Weekly", goal: "15", value: "18", trend: [14, 16, 17, 18] },
+                                { metric: "Code Coverage %", goal: "80", value: "82", trend: [75, 78, 80, 82] }
+                            ],
+                            marketing: [
+                                { metric: "Organic Traffic (k/wk)", goal: "10", value: "11.2", trend: [9.5, 10.2, 10.8, 11.2] },
+                                { metric: "Cost Per Lead ($)", goal: "50", value: "45.50", trend: [52, 48, 46, 45.5] },
+                                { metric: "Keyword Rankings Top 3", goal: "20", value: "18", trend: [15, 16, 17, 18] },
+                                { metric: "Social Engagement %", goal: "5", value: "5.8", trend: [4.5, 5.0, 5.5, 5.8] }
+                            ],
+                            operations: [
+                                { metric: "Avg Repair Time (days)", goal: "5", value: "6.1", trend: [7, 6.5, 6.3, 6.1] },
+                                { metric: "Machines Shipped Weekly", goal: "10", value: "12", trend: [9, 10, 11, 12] },
+                                { metric: "Sales Qualified Leads", goal: "30", value: "35", trend: [28, 32, 33, 35] },
+                                { metric: "Order Fulfillment %", goal: "95", value: "94", trend: [92, 93, 93, 94] }
+                            ]
+                        },
                         scorecardHistory: {},
                         companyRocks: [
-                            { id: 1, title: "ULP Craigslist Integration", owner: "Asfand Yaar", status: "On Track", team: "Dev" },
-                            { id: 2, title: "Q4 SEO Strategy for zuma.ca", owner: "Hamza Khan", status: "On Track", team: "Marketing" },
-                            { id: 3, title: "Streamline Shopify-Odoo Order Sync", owner: "Gocha Avsajanishvili", status: "Off Track", team: "Dev" },
-                            { id: 4, title: "Implement new TIP inspection template", owner: "Asfand Yaar", status: "Done", team: "Ops" },
+                            { id: 1, title: "ULP Craigslist Integration", owner: "Asfand Yaar", ownerId: "emp1", status: "On Track", team: "Dev", quarter: "Q4 2025" },
+                            { id: 2, title: "Q4 SEO Strategy for zuma.ca", owner: "Hamza Khan", ownerId: "emp7", status: "On Track", team: "Marketing", quarter: "Q4 2025" },
+                            { id: 3, title: "Streamline Shopify-Odoo Order Sync", owner: "Gocha Avsajanishvili", ownerId: "emp2", status: "Off Track", team: "Dev", quarter: "Q4 2025" },
+                            { id: 4, title: "Implement new TIP inspection template", owner: "Asfand Yaar", ownerId: "emp1", status: "Done", team: "Ops", quarter: "Q4 2025" },
+                        ],
+                        departmentRocks: {
+                            technology: [
+                                { id: 101, title: "Launch ULP v2 beta", owner: "Gocha A.", ownerId: "emp2", status: "On Track", department: "technology" },
+                                { id: 102, title: "Implement CI/CD pipeline", owner: "Prince E.", ownerId: "emp3", status: "On Track", department: "technology" }
+                            ],
+                            marketing: [
+                                { id: 201, title: "Launch influencer program", owner: "Hamza K.", ownerId: "emp7", status: "On Track", department: "marketing" },
+                                { id: 202, title: "Redesign email campaigns", owner: "Sarah C.", ownerId: "emp8", status: "Done", department: "marketing" }
+                            ],
+                            operations: [
+                                { id: 301, title: "Reduce repair time 20%", owner: "Maria G.", ownerId: "emp12", status: "Off Track", department: "operations" },
+                                { id: 302, title: "New shipping partners", owner: "Tom W.", ownerId: "emp13", status: "On Track", department: "operations" }
+                            ]
+                        },
+                        individualRocks: [
+                            { id: 1001, title: "Complete AWS certification", employeeId: "emp3", employeeName: "Prince Ezra", department: "technology", status: "On Track" },
+                            { id: 1002, title: "Refactor TIP image upload", employeeId: "emp3", employeeName: "Prince Ezra", department: "technology", status: "Done" },
+                            { id: 1003, title: "Automate QA tests", employeeId: "emp6", employeeName: "JC Vergara", department: "technology", status: "On Track" },
+                            { id: 1004, title: "Build Shopify integration", employeeId: "emp4", employeeName: "Akash", department: "technology", status: "On Track" },
+                            { id: 1005, title: "Create 10 SEO blog posts", employeeId: "emp9", employeeName: "Mike Johnson", department: "marketing", status: "Off Track" },
+                            { id: 1006, title: "Design landing pages", employeeId: "emp8", employeeName: "Sarah Chen", department: "marketing", status: "Done" },
+                            { id: 1007, title: "Optimize Google Ads", employeeId: "emp10", employeeName: "Lisa Park", department: "marketing", status: "On Track" },
+                            { id: 1008, title: "Close 5 enterprise deals", employeeId: "emp11", employeeName: "John Smith", department: "operations", status: "On Track" },
+                            { id: 1009, title: "Implement lean process", employeeId: "emp12", employeeName: "Maria Garcia", department: "operations", status: "Off Track" },
+                            { id: 1010, title: "Setup intl shipping", employeeId: "emp13", employeeName: "Tom Wilson", department: "operations", status: "On Track" }
                         ],
                         issues: [
-                            { id: 1, title: "Odoo sync with Shopify is lagging by 30 mins", priority: 1, age: 5 },
-                            { id: 2, title: "Need to define Q4 marketing budget for new ad campaigns", priority: 2, age: 12 },
+                            { id: 1, title: "Odoo sync with Shopify is lagging by 30 mins", priority: 1, age: 5, department: "technology" },
+                            { id: 2, title: "Need to define Q4 marketing budget for new ad campaigns", priority: 2, age: 12, department: "marketing" },
+                            { id: 3, title: "High volume of support tickets for checkout", priority: 1, age: 2, department: "technology" },
+                            { id: 4, title: "Recruitment plan for Senior SEO Writer", priority: 3, age: 20, department: "marketing" },
+                            { id: 5, title: "Inconsistent photo quality from TIP", priority: 2, age: 8, department: "operations" },
+                            { id: 6, title: "Shortage of hydraulic pumps", priority: 1, age: 3, department: "operations" }
+                        ],
+                        todos: [
+                            { id: 501, task: "Review Q3 Marketing Graphics", assignee: "Hamza K.", assigneeId: "emp7", department: "marketing", dueDate: "2025-09-30", completed: false },
+                            { id: 502, task: "Finalize server spec for ULP v2", assignee: "Gocha A.", assigneeId: "emp2", department: "technology", dueDate: "2025-09-28", completed: false },
+                            { id: 503, task: "Contact new parts supplier", assignee: "Maria G.", assigneeId: "emp12", department: "operations", dueDate: "2025-09-29", completed: true },
+                            { id: 504, task: "Fix login bug on mobile", assignee: "Prince E.", assigneeId: "emp3", department: "technology", dueDate: "2025-09-27", completed: true }
                         ],
                         meetingHistory: [
-                            { date: "Sep 22, 2025", rating: 9, sentiment: 85, keyTopics: ["Shopify Sync", "Marketing Budget"], completedTodos: [], message: "Tech team will provide an update on the sync fix next week." },
-                            { date: "Sep 15, 2025", rating: 8, sentiment: 82, keyTopics: ["TIP Photos", "Sales Pipeline"], completedTodos: [{id: 101, task: "Follow up with new lead from Texas"}], message: "Sales to action new leads from the conference." },
-                            { date: "Sep 8, 2025", rating: 8, sentiment: 88, keyTopics: ["ULP Performance", "New Hires"], completedTodos: [], message: "HR to start the hiring process for the new writer role." },
+                            { id: "mtg1", date: "Sep 22, 2025", department: "technology", rating: 9, sentiment: 85, keyTopics: ["Shopify Sync", "API Performance"], completedTodos: [504], message: "Tech team will provide update on sync fix.", transcriptionUrl: "https://meet.google.com/recordings/tech-092225", notes: "Discussed Odoo sync. Prince fixed mobile login. Team morale high." },
+                            { id: "mtg2", date: "Sep 22, 2025", department: "marketing", rating: 8, sentiment: 82, keyTopics: ["SEO Strategy", "Ad Campaigns"], completedTodos: [], message: "Marketing to finalize Q4 budget.", transcriptionUrl: "https://meet.google.com/recordings/mkt-092225", notes: "Reviewed SEO. Lisa's ads showing 15% better CTR." },
+                            { id: "mtg3", date: "Sep 22, 2025", department: "operations", rating: 7, sentiment: 75, keyTopics: ["Repair Times", "Parts"], completedTodos: [503], message: "Maria contacted supplier.", transcriptionUrl: "https://meet.google.com/recordings/ops-092225", notes: "Pump shortage critical. Repair times above target." },
+                            { id: "mtg4", date: "Sep 15, 2025", department: "technology", rating: 8, sentiment: 88, keyTopics: ["ULP v2", "Testing"], completedTodos: [], message: "JC to complete test automation.", transcriptionUrl: "https://meet.google.com/recordings/tech-091525", notes: "ULP v2 on track." },
+                            { id: "mtg5", date: "Sep 15, 2025", department: "marketing", rating: 9, sentiment: 90, keyTopics: ["Landing Pages"], completedTodos: [], message: "Sarah's designs approved.", transcriptionUrl: "https://meet.google.com/recordings/mkt-091525", notes: "25% better conversion in A/B tests." }
                         ],
                         departments: {
-                            technology: { name: "Technology", head: "Asfand Yaar", members: ["Gocha Avsajanishvili", "Prince Ezra", "Akash", "Saeed Ahmed", "JC Vergara"] },
-                            marketing: { name: "Marketing", head: "Hamza Khan", members: ["UX Designer", "SEO Writer", "Ads Specialist"] },
-                            operations: { name: "Operations", head: "Asfand Yaar (Interim)", members: ["Sales Team", "Repair Team", "Shipping Team"] },
+                            technology: {
+                                name: "Technology",
+                                head: "Asfand Yaar",
+                                headId: "emp1",
+                                members: ["Gocha Avsajanishvili", "Prince Ezra", "Akash", "Saeed Ahmed", "JC Vergara"],
+                                memberIds: ["emp2", "emp3", "emp4", "emp5", "emp6"],
+                                rocks: 2,
+                                issues: 2
+                            },
+                            marketing: {
+                                name: "Marketing",
+                                head: "Hamza Khan",
+                                headId: "emp7",
+                                members: ["Sarah Chen", "Mike Johnson", "Lisa Park"],
+                                memberIds: ["emp8", "emp9", "emp10"],
+                                rocks: 2,
+                                issues: 2
+                            },
+                            operations: {
+                                name: "Operations",
+                                head: "Asfand Yaar (Interim)",
+                                headId: "emp1",
+                                members: ["John Smith", "Maria Garcia", "Tom Wilson"],
+                                memberIds: ["emp11", "emp12", "emp13"],
+                                rocks: 2,
+                                issues: 2
+                            }
                         }
                     };
                     Persistence.save(this.data);
@@ -245,10 +658,36 @@
                     currentToDos: [],
                     meetingIssues: JSON.parse(JSON.stringify(this.data.issues || [])),
                 };
-                
+
+                this.startAutoRefresh();
                 this.renderSidebar();
                 this.router();
                 window.addEventListener('hashchange', this.router.bind(this));
+
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    // Ctrl/Cmd + S to save
+                    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                        e.preventDefault();
+                        Persistence.save(App.data);
+                        App.showNotification('success', 'All changes saved');
+                    }
+                    // ESC to close modals
+                    if (e.key === 'Escape') {
+                        document.querySelectorAll('.fixed.inset-0').forEach(modal => {
+                            modal.classList.add('hidden');
+                        });
+                    }
+                });
+
+                // Auto-save indicator
+                this.hasUnsavedChanges = false;
+                setInterval(() => {
+                    if (this.hasUnsavedChanges) {
+                        Persistence.save(App.data);
+                        this.hasUnsavedChanges = false;
+                    }
+                }, 30000);
                 
                 const menuButton = document.getElementById('menu-button');
                 const sidebar = document.getElementById('sidebar');
@@ -272,33 +711,683 @@
                 overlay.addEventListener('click', toggleSidebar);
 
                 // Event delegation for dynamically added elements
-                document.body.addEventListener('change', (e) => {
-                    if (e.target.classList.contains('rock-status-select')) {
-                        const rockId = parseInt(e.target.dataset.rockId);
-                        const rock = App.data.companyRocks.find(r => r.id === rockId);
-                        if (rock) {
-                            rock.status = e.target.value;
-                            Persistence.save(App.data);
-                            App.render('rocks');
-                        }
-                    }
+                document.body.addEventListener('input', (e) => {
                     if (e.target.classList.contains('scorecard-input')) {
                         const index = parseInt(e.target.dataset.index);
                         App.data.scorecard[index].value = e.target.value;
                         Persistence.save(App.data);
                     }
+                    if (e.target.classList.contains('dept-scorecard-input')) {
+                        const dept = e.target.dataset.dept;
+                        const idx = parseInt(e.target.dataset.index);
+                        if (App.data.departmentalScorecards[dept] && App.data.departmentalScorecards[dept][idx]) {
+                            App.data.departmentalScorecards[dept][idx].value = e.target.value;
+                            Persistence.save(App.data);
+                        }
+                    }
+                });
+
+                // AI Chat Bot handlers
+                document.getElementById('open-ai-chat')?.addEventListener('click', () => {
+                    document.getElementById('ai-chat-modal').classList.toggle('hidden');
+                });
+
+                document.getElementById('close-ai-chat')?.addEventListener('click', () => {
+                    document.getElementById('ai-chat-modal').classList.add('hidden');
+                });
+
+                document.getElementById('ai-send-btn')?.addEventListener('click', () => {
+                    const input = document.getElementById('ai-chat-input');
+                    const messages = document.getElementById('ai-chat-messages');
+                    if (input && input.value.trim() && messages) {
+                        // Add user message
+                        const userMsg = document.createElement('div');
+                        userMsg.className = 'flex items-start space-x-2 justify-end';
+                        userMsg.innerHTML = `
+                            <div class="bg-indigo-600 rounded-lg p-3 max-w-xs">
+                                <p class="text-sm text-white">${Security.escapeHtml(input.value)}</p>
+                            </div>
+                        `;
+                        messages.appendChild(userMsg);
+
+                        // Simulate AI response
+                        setTimeout(() => {
+                            const aiMsg = document.createElement('div');
+                            aiMsg.className = 'flex items-start space-x-2';
+                            const responses = [
+                                "I've analyzed your L10 meetings. You have 3 off-track rocks that need immediate attention.",
+                                "Your team's productivity has increased 12% since last quarter based on scorecard metrics.",
+                                "I notice recurring issues with customer response times. Consider adding this to next week's IDS.",
+                                "Great progress on Q1 rocks! 78% are on track or completed."
+                            ];
+                            aiMsg.innerHTML = `
+                                <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path>
+                                    </svg>
+                                </div>
+                                <div class="flex-1 bg-gray-700 rounded-lg p-3">
+                                    <p class="text-sm text-gray-300">${responses[Math.floor(Math.random() * responses.length)]}</p>
+                                </div>
+                            `;
+                            messages.appendChild(aiMsg);
+                            messages.scrollTop = messages.scrollHeight;
+                        }, 1000);
+
+                        input.value = '';
+                    }
                 });
 
                 document.body.addEventListener('click', (e) => {
-                     if (e.target.id === 'save-snapshot-btn') {
+                    const target = e.target;
+
+                    if (target.id === 'save-snapshot-btn') {
                         const weekId = App.getWeekId();
                         App.data.scorecardHistory[weekId] = JSON.parse(JSON.stringify(App.data.scorecard));
                         Persistence.save(App.data);
                         alert(`Snapshot for week ${weekId} saved!`);
                     }
+
+                    // Rock modal handlers
+                    if (target.id === 'add-company-rock-btn' || target.id === 'add-dept-rock-btn' ||
+                        target.id === 'add-individual-rock-btn' || target.closest('.edit-rock-btn')) {
+                        const rockModal = document.getElementById('rock-modal');
+                        const rockForm = document.getElementById('rock-form');
+                        const modalTitle = document.getElementById('rock-modal-title');
+                        const deleteBtn = document.getElementById('delete-rock-btn');
+                        const editBtn = target.closest('.edit-rock-btn');
+
+                        if (rockModal && rockForm) {
+                            rockForm.reset();
+                            delete rockForm.dataset.rockId;
+                            delete rockForm.dataset.rockType;
+                            delete rockForm.dataset.dept;
+                            delete rockForm.dataset.owner;
+
+                            if (editBtn) {
+                                const rockId = parseInt(editBtn.dataset.rockId);
+                                const rockType = editBtn.dataset.rockType;
+                                let rock;
+
+                                if (rockType === 'company') {
+                                    rock = App.data.companyRocks.find(r => r.id === rockId);
+                                } else if (rockType === 'department') {
+                                    const dept = editBtn.dataset.dept;
+                                    rock = App.data.departmentalRocks?.[dept]?.find(r => r.id === rockId);
+                                } else if (rockType === 'individual') {
+                                    const owner = editBtn.dataset.owner;
+                                    if (!App.data.individualRocks) App.data.individualRocks = {};
+                                    rock = App.data.individualRocks[owner]?.find(r => r.id === rockId);
+                                }
+
+                                if (rock) {
+                                    modalTitle.textContent = 'Edit Rock';
+                                    rockForm.querySelector('[name="rock-name"]').value = rock.name || rock.title || '';
+                                    rockForm.querySelector('[name="rock-type"]').value = rockType;
+                                    rockForm.querySelector('[name="rock-owner"]').value = rock.owner || '';
+                                    rockForm.querySelector('[name="rock-department"]').value = rock.department || editBtn.dataset.dept || '';
+                                    rockForm.querySelector('[name="rock-status"]').value = rock.status || 'On Track';
+                                    rockForm.querySelector('[name="rock-due"]').value = rock.dueDate || '';
+                                    rockForm.querySelector('[name="rock-notes"]').value = rock.notes || '';
+                                    rockForm.dataset.rockId = rockId;
+                                    rockForm.dataset.rockType = rockType;
+                                    rockForm.dataset.dept = editBtn.dataset.dept || '';
+                                    rockForm.dataset.owner = editBtn.dataset.owner || '';
+                                    deleteBtn.classList.remove('hidden');
+                                }
+                            } else {
+                                modalTitle.textContent = 'Add New Rock';
+                                deleteBtn.classList.add('hidden');
+
+                                // Pre-select type based on button clicked
+                                if (target.id === 'add-company-rock-btn') {
+                                    rockForm.querySelector('[name="rock-type"]').value = 'company';
+                                } else if (target.id === 'add-dept-rock-btn') {
+                                    rockForm.querySelector('[name="rock-type"]').value = 'department';
+                                } else if (target.id === 'add-individual-rock-btn') {
+                                    rockForm.querySelector('[name="rock-type"]').value = 'individual';
+                                }
+                            }
+
+                            rockModal.classList.remove('hidden');
+                        }
+                    }
+
+                    // Save rock
+                    if (target.id === 'save-rock-btn') {
+                        const rockForm = document.getElementById('rock-form');
+                        const rockModal = document.getElementById('rock-modal');
+
+                        if (rockForm) {
+                            const formData = new FormData(rockForm);
+                            const rockData = {
+                                name: formData.get('rock-name'),
+                                title: formData.get('rock-name'), // Use both name and title for compatibility
+                                type: formData.get('rock-type'),
+                                owner: formData.get('rock-owner'),
+                                department: formData.get('rock-department'),
+                                status: formData.get('rock-status'),
+                                dueDate: formData.get('rock-due'),
+                                notes: formData.get('rock-notes')
+                            };
+
+                            if (!rockData.name) {
+                                App.showNotification('error', 'Rock name is required');
+                                return;
+                            }
+
+                            const isEdit = rockForm.dataset.rockId;
+                            const rockId = isEdit ? parseInt(rockForm.dataset.rockId) : Date.now();
+
+                            const rock = {
+                                id: rockId,
+                                ...rockData,
+                                quarter: 'Q1 2025'
+                            };
+
+                            // Initialize data structures if needed
+                            if (!App.data.departmentalRocks) App.data.departmentalRocks = {};
+                            if (!App.data.individualRocks) App.data.individualRocks = {};
+
+                            if (rockData.type === 'company') {
+                                if (isEdit) {
+                                    const index = App.data.companyRocks.findIndex(r => r.id === rockId);
+                                    if (index > -1) App.data.companyRocks[index] = rock;
+                                } else {
+                                    App.data.companyRocks.push(rock);
+                                }
+                            } else if (rockData.type === 'department' && rockData.department) {
+                                if (!App.data.departmentalRocks[rockData.department]) {
+                                    App.data.departmentalRocks[rockData.department] = [];
+                                }
+                                if (isEdit) {
+                                    const index = App.data.departmentalRocks[rockData.department].findIndex(r => r.id === rockId);
+                                    if (index > -1) App.data.departmentalRocks[rockData.department][index] = rock;
+                                } else {
+                                    App.data.departmentalRocks[rockData.department].push(rock);
+                                }
+                            } else if (rockData.type === 'individual' && rockData.owner) {
+                                if (!App.data.individualRocks[rockData.owner]) {
+                                    App.data.individualRocks[rockData.owner] = [];
+                                }
+                                if (isEdit) {
+                                    const index = App.data.individualRocks[rockData.owner].findIndex(r => r.id === rockId);
+                                    if (index > -1) App.data.individualRocks[rockData.owner][index] = rock;
+                                } else {
+                                    App.data.individualRocks[rockData.owner].push(rock);
+                                }
+                            }
+
+                            Persistence.save(App.data);
+                            App.showNotification('success', isEdit ? 'Rock updated successfully' : 'Rock added successfully');
+                            rockModal.classList.add('hidden');
+                            App.router();
+                        }
+                    }
+
+                    // Delete rock
+                    if (target.id === 'delete-rock-btn') {
+                        const rockForm = document.getElementById('rock-form');
+                        const rockModal = document.getElementById('rock-modal');
+
+                        if (rockForm && rockForm.dataset.rockId && confirm('Are you sure you want to delete this rock?')) {
+                            const rockId = parseInt(rockForm.dataset.rockId);
+                            const rockType = rockForm.dataset.rockType;
+
+                            if (rockType === 'company') {
+                                App.data.companyRocks = App.data.companyRocks.filter(r => r.id !== rockId);
+                            } else if (rockType === 'department') {
+                                const dept = rockForm.dataset.dept;
+                                if (App.data.departmentalRocks?.[dept]) {
+                                    App.data.departmentalRocks[dept] = App.data.departmentalRocks[dept].filter(r => r.id !== rockId);
+                                }
+                            } else if (rockType === 'individual') {
+                                const owner = rockForm.dataset.owner;
+                                if (App.data.individualRocks?.[owner]) {
+                                    App.data.individualRocks[owner] = App.data.individualRocks[owner].filter(r => r.id !== rockId);
+                                }
+                            }
+
+                            Persistence.save(App.data);
+                            App.showNotification('success', 'Rock deleted successfully');
+                            rockModal.classList.add('hidden');
+                            App.router();
+                        }
+                    }
+
+                    // Cancel rock modal
+                    if (target.id === 'cancel-rock-btn') {
+                        const rockModal = document.getElementById('rock-modal');
+                        if (rockModal) rockModal.classList.add('hidden');
+                    }
+
+                    // Modal close on backdrop click
+                    if (target.id === 'rock-modal' && target === e.currentTarget) {
+                        target.classList.add('hidden');
+                    }
+
+                    // Employee modal handlers
+                    if (target.id === 'add-employee-btn' || target.closest('.edit-employee-btn')) {
+                        const empModal = document.getElementById('employee-modal');
+                        const empForm = document.getElementById('employee-form');
+                        const modalTitle = document.getElementById('employee-modal-title');
+                        const deleteBtn = document.getElementById('delete-employee-btn');
+                        const editBtn = target.closest('.edit-employee-btn');
+
+                        if (empModal && empForm) {
+                            empForm.reset();
+                            delete empForm.dataset.employeeId;
+
+                            if (editBtn) {
+                                const empId = parseInt(editBtn.dataset.employeeId);
+                                const employee = App.data.employees.find(e => e.id === empId);
+
+                                if (employee) {
+                                    modalTitle.textContent = 'Edit Employee';
+                                    empForm.querySelector('[name="employee-name"]').value = employee.name || '';
+                                    empForm.querySelector('[name="employee-role"]').value = employee.role || '';
+                                    empForm.querySelector('[name="employee-department"]').value = employee.department || '';
+                                    empForm.querySelector('[name="employee-email"]').value = employee.email || '';
+                                    empForm.dataset.employeeId = empId;
+                                    deleteBtn.classList.remove('hidden');
+                                }
+                            } else {
+                                modalTitle.textContent = 'Add New Employee';
+                                deleteBtn.classList.add('hidden');
+                            }
+
+                            empModal.classList.remove('hidden');
+                        }
+                    }
+
+                    // Save employee
+                    if (target.id === 'save-employee-btn') {
+                        const empForm = document.getElementById('employee-form');
+                        const empModal = document.getElementById('employee-modal');
+
+                        if (empForm) {
+                            const formData = new FormData(empForm);
+                            const empData = {
+                                name: formData.get('employee-name'),
+                                role: formData.get('employee-role'),
+                                department: formData.get('employee-department'),
+                                email: formData.get('employee-email')
+                            };
+
+                            if (!empData.name) {
+                                App.showNotification('error', 'Employee name is required');
+                                return;
+                            }
+
+                            const isEdit = empForm.dataset.employeeId;
+                            const empId = isEdit ? parseInt(empForm.dataset.employeeId) : Date.now();
+
+                            const employee = {
+                                id: empId,
+                                ...empData
+                            };
+
+                            if (isEdit) {
+                                const index = App.data.employees.findIndex(e => e.id === empId);
+                                if (index > -1) App.data.employees[index] = employee;
+                            } else {
+                                App.data.employees.push(employee);
+                            }
+
+                            // Update department members if department is assigned
+                            if (empData.department && App.data.departments[empData.department]) {
+                                const dept = App.data.departments[empData.department];
+                                if (!dept.members) dept.members = [];
+                                if (!dept.members.includes(empData.name)) {
+                                    dept.members.push(empData.name);
+                                }
+                            }
+
+                            Persistence.save(App.data);
+                            App.showNotification('success', isEdit ? 'Employee updated successfully' : 'Employee added successfully');
+                            empModal.classList.add('hidden');
+                            App.router();
+                        }
+                    }
+
+                    // Delete employee
+                    if (target.id === 'delete-employee-btn') {
+                        const empForm = document.getElementById('employee-form');
+                        const empModal = document.getElementById('employee-modal');
+
+                        if (empForm && empForm.dataset.employeeId && confirm('Are you sure you want to delete this employee?')) {
+                            const empId = parseInt(empForm.dataset.employeeId);
+                            const employee = App.data.employees.find(e => e.id === empId);
+
+                            // Remove from employees array
+                            App.data.employees = App.data.employees.filter(e => e.id !== empId);
+
+                            // Remove from department members
+                            if (employee && employee.department && App.data.departments[employee.department]) {
+                                const dept = App.data.departments[employee.department];
+                                if (dept.members) {
+                                    dept.members = dept.members.filter(m => m !== employee.name);
+                                }
+                            }
+
+                            // Remove associated individual rocks
+                            if (employee && App.data.individualRocks?.[employee.name]) {
+                                delete App.data.individualRocks[employee.name];
+                            }
+
+                            Persistence.save(App.data);
+                            App.showNotification('success', 'Employee deleted successfully');
+                            empModal.classList.add('hidden');
+                            App.router();
+                        }
+                    }
+
+                    // Cancel employee modal
+                    if (target.id === 'cancel-employee-btn') {
+                        const empModal = document.getElementById('employee-modal');
+                        if (empModal) empModal.classList.add('hidden');
+                    }
+
+                    // Employee modal close on backdrop click
+                    if (target.id === 'employee-modal' && target === e.currentTarget) {
+                        target.classList.add('hidden');
+                    }
+
+                    // Metric modal handlers
+                    if (target.id === 'add-metric-btn' || target.closest('.edit-metric-btn')) {
+                        const metricModal = document.getElementById('metric-modal');
+                        const metricForm = document.getElementById('metric-form');
+                        const modalTitle = document.getElementById('metric-modal-title');
+                        const deleteBtn = document.getElementById('delete-metric-btn');
+                        const deptSelect = document.getElementById('metric-department-select');
+                        const typeSelect = metricForm?.querySelector('[name="metric-type"]');
+
+                        if (metricModal && metricForm) {
+                            metricForm.reset();
+                            delete metricForm.dataset.metricIndex;
+                            delete metricForm.dataset.scorecardType;
+                            delete metricForm.dataset.department;
+
+                            const scorecardType = target.dataset.scorecardType || 'company';
+                            const department = target.dataset.department;
+
+                            modalTitle.textContent = 'Add New Metric';
+                            deleteBtn.classList.add('hidden');
+
+                            if (typeSelect) {
+                                typeSelect.value = department ? 'department' : 'company';
+                                if (department) {
+                                    deptSelect.classList.remove('hidden');
+                                    metricForm.querySelector('[name="metric-department"]').value = department;
+                                } else {
+                                    deptSelect.classList.add('hidden');
+                                }
+                            }
+
+                            metricModal.classList.remove('hidden');
+
+                            // Show/hide department select based on type
+                            typeSelect?.addEventListener('change', (e) => {
+                                if (e.target.value === 'department') {
+                                    deptSelect.classList.remove('hidden');
+                                } else {
+                                    deptSelect.classList.add('hidden');
+                                }
+                            });
+                        }
+                    }
+
+                    // Save metric
+                    if (target.id === 'save-metric-btn') {
+                        const metricForm = document.getElementById('metric-form');
+                        const metricModal = document.getElementById('metric-modal');
+
+                        if (metricForm) {
+                            const formData = new FormData(metricForm);
+                            const metricData = {
+                                metric: formData.get('metric-name'),
+                                goal: formData.get('metric-goal'),
+                                value: formData.get('metric-value'),
+                                type: formData.get('metric-type'),
+                                department: formData.get('metric-department'),
+                                trend: []
+                            };
+
+                            if (!metricData.metric) {
+                                App.showNotification('error', 'Metric name is required');
+                                return;
+                            }
+
+                            if (metricData.type === 'company') {
+                                App.data.scorecard.push(metricData);
+                            } else if (metricData.type === 'department' && metricData.department) {
+                                if (!App.data.departmentalScorecards) App.data.departmentalScorecards = {};
+                                if (!App.data.departmentalScorecards[metricData.department]) {
+                                    App.data.departmentalScorecards[metricData.department] = [];
+                                }
+                                App.data.departmentalScorecards[metricData.department].push(metricData);
+                            }
+
+                            Persistence.save(App.data);
+                            App.showNotification('success', 'Metric added successfully');
+                            metricModal.classList.add('hidden');
+                            App.router();
+                        }
+                    }
+
+                    // Cancel metric modal
+                    if (target.id === 'cancel-metric-btn') {
+                        const metricModal = document.getElementById('metric-modal');
+                        if (metricModal) metricModal.classList.add('hidden');
+                    }
+
+                    // Google Meet Sync simulation
+                    if (target.id === 'sync-meet-btn' || target.classList.contains('google-meet-sync')) {
+                        const spinner = document.getElementById('sync-spinner');
+                        if (spinner) {
+                            spinner.classList.remove('hidden');
+                        }
+                        App.showNotification('info', 'Syncing with Google Meet...');
+
+                        setTimeout(() => {
+                            if (spinner) spinner.classList.add('hidden');
+                            App.showNotification('success', 'Google Meet sync complete! 3 new transcripts available.');
+
+                            // Update meeting data
+                            if (App.data.meetingHistory.length > 0) {
+                                App.data.meetingHistory[0].hasTranscript = true;
+                                App.data.meetingHistory[0].hasRecording = true;
+                                Persistence.save(App.data);
+                            }
+                        }, 2000);
+                    }
+
+                    // Webhook simulation
+                    if (target.classList.contains('simulate-webhook')) {
+                        App.simulateWebhookUpdate();
+                        App.showNotification('info', 'Webhook test triggered!');
+                    }
+
+                    // Add customer/employee headline rows
+                    if (target.id === 'add-customer-headline') {
+                        const table = document.getElementById('customer-headlines-table');
+                        if (table) {
+                            const newRow = table.insertRow();
+                            newRow.className = 'border-b border-gray-700';
+                            newRow.innerHTML = table.rows[0].innerHTML;
+                            newRow.querySelectorAll('input, select').forEach(el => el.value = '');
+                        }
+                    }
+
+                    if (target.id === 'add-employee-headline') {
+                        const table = document.getElementById('employee-headlines-table');
+                        if (table) {
+                            const newRow = table.insertRow();
+                            newRow.className = 'border-b border-gray-700';
+                            newRow.innerHTML = table.rows[0].innerHTML;
+                            newRow.querySelectorAll('input, select').forEach(el => el.value = '');
+                        }
+                    }
+
+                    // Add headlines to IDS from tables
+                    if (target.classList.contains('customer-to-ids') || target.classList.contains('employee-to-ids')) {
+                        const row = target.closest('tr');
+                        if (row) {
+                            const inputs = row.querySelectorAll('input, select');
+                            const headline = inputs[1]?.value || inputs[0]?.value || 'Issue from headlines';
+                            if (headline) {
+                                const newIssue = {
+                                    id: Date.now(),
+                                    title: headline,
+                                    priority: 2,
+                                    status: 'Open'
+                                };
+                                App.data.l10Data.meetingIssues.push(newIssue);
+                                App.showNotification('success', 'Added to IDS list!');
+                            }
+                        }
+                    }
+
+                    // View history
+                    if (target.id === 'view-history-btn') {
+                        const history = App.data.scorecardHistory || {};
+                        const weeks = Object.keys(history).sort().reverse().slice(0, 12);
+
+                        if (weeks.length === 0) {
+                            App.showNotification('info', 'No historical snapshots available');
+                            return;
+                        }
+
+                        const historyHTML = `
+                            <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" id="history-modal">
+                                <div class="bg-gray-800 rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+                                    <div class="p-6 border-b border-gray-700">
+                                        <h3 class="text-xl font-bold text-white">Scorecard History</h3>
+                                    </div>
+                                    <div class="p-6">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                            ${weeks.map(week => {
+                                                const snapshot = history[week];
+                                                return `
+                                                    <div class="bg-gray-900 border border-gray-700 rounded-lg p-4">
+                                                        <h4 class="font-semibold text-white mb-3">Week ${week}</h4>
+                                                        <div class="space-y-2">
+                                                            ${snapshot.slice(0, 5).map(item => {
+                                                                const numGoal = parseFloat(String(item.goal).replace(/[^0-9.-]/g, '')) || 0;
+                                                                const numValue = parseFloat(String(item.value).replace(/[^0-9.-]/g, '')) || 0;
+                                                                const onTarget = numValue >= numGoal;
+                                                                return `
+                                                                    <div class="flex justify-between items-center text-sm">
+                                                                        <span class="text-gray-400">${item.metric}</span>
+                                                                        <span class="${onTarget ? 'text-green-400' : 'text-red-400'}">${item.value}</span>
+                                                                    </div>
+                                                                `;
+                                                            }).join('')}
+                                                        </div>
+                                                    </div>
+                                                `;
+                                            }).join('')}
+                                        </div>
+                                    </div>
+                                    <div class="p-6 border-t border-gray-700">
+                                        <button onclick="document.getElementById('history-modal').remove()" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+
+                        document.body.insertAdjacentHTML('beforeend', historyHTML);
+                    }
                 });
             },
-            
+
+            showNotification(type, message) {
+                const colors = {
+                    success: 'bg-green-600',
+                    error: 'bg-red-600',
+                    warning: 'bg-amber-600',
+                    info: 'bg-blue-600'
+                };
+                const notification = document.createElement('div');
+                notification.className = `fixed bottom-20 right-4 ${colors[type]} text-white px-4 py-2 rounded-lg shadow-lg z-40 transition-opacity duration-500`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => notification.remove(), 500);
+                }, 3000);
+            },
+
+            showAddIssueModal() {
+                UI.showModal({
+                    title: 'Add New Issue',
+                    contentHTML: `
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm text-gray-300 mb-1">Issue Title</label>
+                                <input id="issue-title" type="text" class="w-full p-2 bg-gray-800 border border-gray-700 rounded text-white" placeholder="Enter issue title">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-300 mb-1">Description</label>
+                                <textarea id="issue-description" class="w-full p-2 bg-gray-800 border border-gray-700 rounded text-white" rows="3"></textarea>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm text-gray-300 mb-1">Priority</label>
+                                    <select id="issue-priority" class="w-full p-2 bg-gray-800 border border-gray-700 rounded text-white">
+                                        <option value="1">1 - Critical</option>
+                                        <option value="2">2 - High</option>
+                                        <option value="3" selected>3 - Normal</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-gray-300 mb-1">Department</label>
+                                    <select id="issue-department" class="w-full p-2 bg-gray-800 border border-gray-700 rounded text-white">
+                                        <option value="technology">Technology</option>
+                                        <option value="marketing">Marketing</option>
+                                        <option value="operations">Operations</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    onSubmit: (content) => {
+                        const title = content.querySelector('#issue-title').value.trim();
+                        const description = content.querySelector('#issue-description').value.trim();
+                        const priority = parseInt(content.querySelector('#issue-priority').value);
+                        const department = content.querySelector('#issue-department').value;
+
+                        if (!title) {
+                            alert('Please enter an issue title');
+                            return;
+                        }
+
+                        const newIssue = {
+                            id: Date.now(),
+                            title,
+                            description,
+                            priority,
+                            department,
+                            age: 0
+                        };
+
+                        App.data.issues.push(newIssue);
+                        Persistence.save(App.data);
+                        UI.hideModal();
+                        App.showNotification('success', 'Issue added successfully');
+                        App.render('issues');
+                    },
+                    submitText: 'Add Issue'
+                });
+            },
+
+            deleteIssue(issueId) {
+                App.data.issues = App.data.issues.filter(i => i.id !== issueId);
+                Persistence.save(App.data);
+                App.showNotification('success', 'Issue deleted');
+                App.render('issues');
+            },
+
             renderSidebar() {
                 const navLinks = [
                     { href: '#dashboard', icon: Icons.home(), text: 'Dashboard' },
@@ -309,6 +1398,7 @@
                     { href: '#issues', icon: Icons.issues(), text: 'Issues' },
                     { href: '#rocks', icon: Icons.rocks(), text: 'Rocks' },
                     { href: '#l10', icon: Icons.meetings(), text: 'Level 10 Meeting', isSpecial: true },
+                    { href: '#integrations', icon: Icons.integrations(), text: 'Integrations' }
                 ];
                 const navContainer = document.getElementById('sidebar-nav');
                 navContainer.innerHTML = navLinks.map(link => `
@@ -323,6 +1413,14 @@
             },
             
             router() {
+                // Clean up charts before navigation
+                if (this._charts && this._charts.length > 0) {
+                    this._charts.forEach(chart => {
+                        try { chart.destroy(); } catch(e) {}
+                    });
+                    this._charts = [];
+                }
+
                 const [hash, param] = (window.location.hash || '#dashboard').split('/');
                 const pageTitle = document.getElementById('page-title');
 
@@ -352,6 +1450,7 @@
                     '#issues': { title: 'Issues', page: 'issues' },
                     '#rocks': { title: 'Rocks', page: 'rocks' },
                     '#l10': { title: 'Level 10 Meeting', page: 'l10' },
+                    '#integrations': { title: 'Integrations', page: 'integrations' }
                 };
 
                 const route = routes[hash] || routes['#dashboard'];
@@ -361,8 +1460,13 @@
             
             render(page, param) {
                 const mainApp = document.getElementById('main-app');
+                // Fallback if page doesn't exist
+                if (!this.pages[page]) {
+                    console.warn(`Page '${page}' not found, defaulting to dashboard`);
+                    page = 'dashboard';
+                }
                 mainApp.innerHTML = this.pages[page](param);
-                if (page === 'dashboard' || page === 'data') {
+                if (page === 'dashboard' || page === 'data' || page === 'departmentDetail') {
                     setTimeout(() => this.renderCharts(), 0);
                 }
                 if(page === 'l10') this.initL10();
@@ -370,21 +1474,33 @@
             
             pages: {
                 dashboard() {
-                    const { scorecard, companyRocks, issues, meetingHistory } = App.data;
+                    const { scorecard, companyRocks, departmentRocks, individualRocks, issues, meetingHistory, todos } = App.data;
                     const getNumber = (value) => {
                         const parsed = parseFloat(String(value ?? '').replace(/[^0-9.-]/g, ''));
                         return Number.isFinite(parsed) ? parsed : 0;
                     };
+
+                    // Calculate metrics
                     const salesMetric = scorecard[0] || {};
                     const csatMetric = scorecard.find(item => item.metric.toLowerCase().includes('csat')) || {};
-                    const onTrackRocks = companyRocks.filter(rock => rock.status === 'On Track' || rock.status === 'Done').length;
+
+                    // Rocks metrics
+                    const allDeptRocks = Object.values(departmentRocks || {}).flat();
+                    const allRocks = [...companyRocks, ...allDeptRocks, ...(individualRocks || [])];
+                    const onTrackRocks = allRocks.filter(r => r.status === 'On Track').length;
+                    const offTrackRocks = allRocks.filter(r => r.status === 'Off Track').length;
+                    const doneRocks = allRocks.filter(r => r.status === 'Done').length;
+
+                    // Todos and Issues
+                    const totalTodos = (todos || []).filter(t => !t.completed).length;
+                    const criticalIssues = issues.filter(i => i.priority === 1).length;
+
                     const salesValue = getNumber(salesMetric.value);
                     const salesGoal = getNumber(salesMetric.goal);
                     const salesDelta = salesGoal ? ((salesValue - salesGoal) / salesGoal) * 100 : 0;
                     const csatValue = getNumber(csatMetric.value);
                     const csatGoal = getNumber(csatMetric.goal);
                     const csatDelta = csatGoal ? csatValue - csatGoal : 0;
-                    const highPriorityIssues = issues.filter(issue => issue.priority === 1).length;
                     const topIssues = issues.slice().sort((a, b) => a.priority - b.priority).slice(0, 3);
 
                     return `
@@ -400,26 +1516,37 @@
 
                         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
                             <div class="xl:col-span-2 space-y-6">
-                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                    <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                                        <p class="text-sm text-gray-400 font-medium">Shopify Sales (Weekly)</p>
-                                        <p class="text-2xl font-bold text-white mt-2">$${salesValue.toLocaleString()}</p>
-                                        <p class="text-sm ${salesDelta >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-1">${salesGoal ? `${salesDelta >= 0 ? '+' : ''}${Math.round(salesDelta)}% vs goal` : 'Goal not set'}</p>
+                                <!-- Top Metrics Row -->
+                                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                                    <div class="bg-gray-800 border border-gray-700 rounded-lg p-3">
+                                        <p class="text-xs text-gray-400 font-medium">Total To-Dos</p>
+                                        <p class="text-xl font-bold text-white mt-1">${totalTodos}</p>
+                                        <p class="text-xs text-gray-500 mt-1">Active</p>
                                     </div>
-                                    <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                                        <p class="text-sm text-gray-400 font-medium">Rocks On Track</p>
-                                        <p class="text-2xl font-bold text-white mt-2">${onTrackRocks} / ${companyRocks.length}</p>
-                                        <p class="text-sm text-gray-400 mt-1">${companyRocks.length ? Math.round((onTrackRocks / companyRocks.length) * 100) : 0}% completion</p>
+                                    <div class="bg-gray-800 border border-gray-700 rounded-lg p-3">
+                                        <p class="text-xs text-gray-400 font-medium">Critical Issues</p>
+                                        <p class="text-xl font-bold text-rose-400 mt-1">${criticalIssues}</p>
+                                        <p class="text-xs text-gray-500 mt-1">Priority 1</p>
                                     </div>
-                                    <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                                        <p class="text-sm text-gray-400 font-medium">Open Issues</p>
-                                        <p class="text-2xl font-bold text-white mt-2">${issues.length}</p>
-                                        <p class="text-sm text-amber-400 mt-1">${highPriorityIssues} priority 1</p>
+                                    <div class="bg-gray-800 border border-gray-700 rounded-lg p-3">
+                                        <p class="text-xs text-gray-400 font-medium">On Track Rocks</p>
+                                        <p class="text-xl font-bold text-emerald-400 mt-1">${onTrackRocks}</p>
+                                        <p class="text-xs text-gray-500 mt-1">of ${allRocks.length}</p>
                                     </div>
-                                    <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                                        <p class="text-sm text-gray-400 font-medium">Customer Satisfaction</p>
-                                        <p class="text-2xl font-bold ${csatDelta >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-2">${csatMetric.value ?? '--'}%</p>
-                                        <p class="text-sm text-gray-400 mt-1">Goal: ${csatMetric.goal ?? '--'}%</p>
+                                    <div class="bg-gray-800 border border-gray-700 rounded-lg p-3">
+                                        <p class="text-xs text-gray-400 font-medium">Off Track Rocks</p>
+                                        <p class="text-xl font-bold text-amber-400 mt-1">${offTrackRocks}</p>
+                                        <p class="text-xs text-gray-500 mt-1">Need attention</p>
+                                    </div>
+                                    <div class="bg-gray-800 border border-gray-700 rounded-lg p-3">
+                                        <p class="text-xs text-gray-400 font-medium">Weekly Sales</p>
+                                        <p class="text-xl font-bold text-white mt-1">$${Math.round(salesValue/1000)}k</p>
+                                        <p class="text-xs ${salesDelta >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-1">${salesDelta >= 0 ? '+' : ''}${Math.round(salesDelta)}%</p>
+                                    </div>
+                                    <div class="bg-gray-800 border border-gray-700 rounded-lg p-3">
+                                        <p class="text-xs text-gray-400 font-medium">CSAT</p>
+                                        <p class="text-xl font-bold ${csatDelta >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-1">${csatMetric.value ?? '--'}%</p>
+                                        <p class="text-xs text-gray-500 mt-1">Goal: ${csatMetric.goal}%</p>
                                     </div>
                                 </div>
 
@@ -457,16 +1584,29 @@
 
                             <div class="space-y-6">
                                 <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
-                                    <h3 class="font-semibold text-white text-lg mb-4">Recent L10 Meetings</h3>
+                                    <div class="flex justify-between items-center mb-4">
+                                        <h3 class="font-semibold text-white text-lg">Recent L10 Meetings</h3>
+                                        <a href="#l10" class="text-indigo-400 hover:text-indigo-300 text-sm">View all →</a>
+                                    </div>
                                     <ul class="space-y-3">
-                                        ${meetingHistory.slice(0, 3).map(meeting => `
-                                            <li class="flex justify-between items-center p-3 bg-gray-900/60 rounded-md">
-                                                <div>
-                                                    <p class="font-semibold text-gray-200">${meeting.date}</p>
-                                                    <p class="text-sm text-gray-400">${meeting.keyTopics.join(', ')}</p>
+                                        ${meetingHistory.slice(0, 3).map(meeting => {
+                                            const dept = App.data.departments[meeting.department] || {};
+                                            return `
+                                            <li class="flex justify-between items-start p-3 bg-gray-900/60 rounded-md">
+                                                <div class="flex-1">
+                                                    <div class="flex items-center space-x-2">
+                                                        <span class="text-xs px-2 py-1 bg-gray-700 text-gray-300 rounded">${dept.name || meeting.department}</span>
+                                                        <p class="font-semibold text-gray-200">${meeting.date}</p>
+                                                    </div>
+                                                    <p class="text-sm text-gray-400 mt-1">${meeting.keyTopics.join(', ')}</p>
+                                                    ${meeting.transcriptionUrl ? `<a href="${meeting.transcriptionUrl}" target="_blank" class="text-xs text-indigo-400 hover:underline mt-1 inline-flex items-center">
+                                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                                        Recording
+                                                    </a>` : ''}
                                                 </div>
-                                                <span class="text-sm font-bold text-indigo-400">Rating: ${meeting.rating}/10</span>
-                                            </li>`).join('') || '<li class="text-gray-500">No meetings logged.</li>'}
+                                                <span class="text-sm font-bold text-indigo-400 ml-3">Rating: ${meeting.rating}/10</span>
+                                            </li>`;
+                                        }).join('') || '<li class="text-gray-500">No meetings logged.</li>'}
                                     </ul>
                                 </div>
                                 <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
@@ -493,52 +1633,153 @@
                         "1-Year Plan&trade;": `<ul class="list-disc list-inside space-y-1">${App.data.vto.oneYearPlan.map(p => `<li>${p}</li>`).join('')}</ul>`
                     }).map(([title, content]) => `<div><h3 class="text-xl font-semibold text-indigo-400 border-b border-gray-700 pb-2 mb-3">${title}</h3><div class="text-gray-300">${content}</div></div>`).join('')}</div></div>`;
                 },
-                 people() { 
-                    return `<div class="bg-gray-800 border border-gray-700 p-6 sm:p-8 rounded-lg shadow">
-                        <h2 class="text-2xl font-bold text-white mb-6">Accountability Chart</h2>
-                        <div class="overflow-x-auto p-4">
-                            <div class="flex flex-col items-center">
-                                <div class="bg-gray-900 border border-gray-700 rounded-lg p-4 text-center w-64">
-                                    <p class="font-bold text-lg text-white">Visionary / Integrator</p>
-                                    <p class="text-gray-400">Asfand Yaar</p>
-                                </div>
-                                <div class="h-8 w-px bg-gray-700"></div>
-                                <div class="w-full border-t-2 border-gray-700"></div>
-                                <div class="flex flex-wrap justify-center pt-8">
-                                    ${Object.values(App.data.departments).map(dept => `
-                                    <div class="flex flex-col items-center mx-4 my-4">
-                                        <div class="bg-gray-900 border border-gray-700 rounded-lg p-4 text-center w-48">
-                                            <p class="font-bold text-white">${dept.name}</p>
-                                            <p class="text-gray-400">${dept.head}</p>
+                 people() {
+                    const { employees, departments, individualRocks } = App.data;
+
+                    // Group employees by department
+                    const employeesByDept = {};
+                    employees.forEach(emp => {
+                        const dept = emp.department || 'unassigned';
+                        if (!employeesByDept[dept]) employeesByDept[dept] = [];
+                        employeesByDept[dept].push(emp);
+                    });
+
+                    return `
+                        <div class="space-y-6">
+                            <!-- Accountability Chart -->
+                            <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
+                                <h2 class="text-2xl font-bold text-white mb-6">Accountability Chart</h2>
+                                <div class="overflow-x-auto p-4">
+                                    <div class="flex flex-col items-center">
+                                        <div class="bg-gray-900 border border-gray-700 rounded-lg p-4 text-center w-64">
+                                            <p class="font-bold text-lg text-white">Visionary / Integrator</p>
+                                            <p class="text-gray-400">Asfand Yaar</p>
                                         </div>
                                         <div class="h-8 w-px bg-gray-700"></div>
-                                        <div class="flex flex-wrap justify-center w-48">
-                                            ${dept.members.map(m => `<span class="text-xs bg-gray-700 text-gray-300 px-2 py-1 m-1 rounded-full">${m}</span>`).join('')}
+                                        <div class="w-full border-t-2 border-gray-700"></div>
+                                        <div class="flex flex-wrap justify-center pt-8">
+                                            ${Object.entries(departments).map(([key, dept]) => `
+                                                <div class="flex flex-col items-center mx-4 my-4">
+                                                    <div class="bg-gray-900 border border-gray-700 rounded-lg p-4 text-center w-48">
+                                                        <p class="font-bold text-white">${dept.name}</p>
+                                                        <p class="text-gray-400">${dept.head}</p>
+                                                    </div>
+                                                    <div class="h-8 w-px bg-gray-700"></div>
+                                                    <div class="flex flex-wrap justify-center w-48">
+                                                        ${dept.members.map(m => `<span class="text-xs bg-gray-700 text-gray-300 px-2 py-1 m-1 rounded-full">${m.split(' ')[0]}</span>`).join('')}
+                                                    </div>
+                                                </div>
+                                            `).join('')}
                                         </div>
                                     </div>
-                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <!-- Employee Directory -->
+                            <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h2 class="text-xl font-bold text-white">Employee Directory</h2>
+                                    <button id="add-employee-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-500">+ Add Employee</button>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    ${employees.map(emp => {
+                                        const empRocks = individualRocks.filter(r => r.employeeId === emp.id);
+                                        const dept = departments[emp.department];
+                                        return `
+                                            <div class="bg-gray-900 border border-gray-700 rounded-lg p-4 relative group">
+                                                <button class="edit-employee-btn absolute top-2 right-2 text-gray-400 hover:text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity" data-employee-id="${emp.id}">
+                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
+                                                </button>
+                                                <div class="flex items-start justify-between mb-2">
+                                                    <div>
+                                                        <p class="font-semibold text-white">${emp.name}</p>
+                                                        <p class="text-sm text-gray-400">${emp.role}</p>
+                                                        <p class="text-xs text-indigo-400 mt-1">${dept?.name || emp.department}</p>
+                                                    </div>
+                                                    <div class="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold">
+                                                        ${emp.name.split(' ').map(n => n[0]).join('')}
+                                                    </div>
+                                                </div>
+                                                ${empRocks.length > 0 ? `
+                                                    <div class="mt-3 pt-3 border-t border-gray-700">
+                                                        <p class="text-xs text-gray-500 mb-2">Individual Rocks (${empRocks.length}):</p>
+                                                        ${empRocks.map(rock => `
+                                                            <div class="text-xs text-gray-300 mb-1 flex items-center">
+                                                                <span class="w-2 h-2 rounded-full mr-1 ${rock.status === 'On Track' ? 'bg-green-500' : rock.status === 'Off Track' ? 'bg-red-500' : 'bg-blue-500'}"></span>
+                                                                ${rock.title.substring(0, 30)}${rock.title.length > 30 ? '...' : ''}
+                                                            </div>
+                                                        `).join('')}
+                                                    </div>
+                                                ` : '<p class="text-xs text-gray-500 mt-3">No individual rocks assigned</p>'}
+                                            </div>
+                                        `;
+                                    }).join('')}
                                 </div>
                             </div>
                         </div>
-                    </div>`;
+                    `;
                 },
-                issues() { 
-                    return `<div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
-                        <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-bold text-white">Company Issues List</h2><button class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700">Add Issue</button></div>
-                        <ul class="space-y-3">
-                        ${App.data.issues.sort((a,b) => a.priority - b.priority).map(issue => `
-                            <li class="p-4 bg-gray-900/50 rounded-lg flex justify-between items-center">
-                                <div>
-                                    <p class="font-semibold text-gray-200">${issue.title}</p>
-                                    <p class="text-sm text-gray-400">Priority: ${issue.priority} &bull; Age: ${issue.age} days</p>
+                issues() {
+                    const { issues, departments } = App.data;
+                    const priorityColors = { 1: 'text-rose-400', 2: 'text-amber-400', 3: 'text-gray-400' };
+                    const priorityBg = { 1: 'bg-rose-500/10 border-rose-500/30', 2: 'bg-amber-500/10 border-amber-500/30', 3: 'bg-gray-500/10 border-gray-500/30' };
+
+                    // Group issues by department
+                    const issuesByDept = {};
+                    issues.forEach(issue => {
+                        const dept = issue.department || 'unassigned';
+                        if (!issuesByDept[dept]) issuesByDept[dept] = [];
+                        issuesByDept[dept].push(issue);
+                    });
+
+                    return `
+                        <div class="space-y-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-2xl font-bold text-white">Company Issues List</h2>
+                                <div class="flex items-center space-x-4">
+                                    <div class="flex items-center space-x-2 text-sm">
+                                        <span class="flex items-center"><span class="w-3 h-3 bg-rose-500 rounded-full mr-1"></span> Critical (${issues.filter(i => i.priority === 1).length})</span>
+                                        <span class="flex items-center"><span class="w-3 h-3 bg-amber-500 rounded-full mr-1"></span> High (${issues.filter(i => i.priority === 2).length})</span>
+                                        <span class="flex items-center"><span class="w-3 h-3 bg-gray-500 rounded-full mr-1"></span> Normal (${issues.filter(i => i.priority === 3).length})</span>
+                                    </div>
+                                    <button class="add-issue-btn bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700">Add Issue</button>
                                 </div>
-                                <div class="flex items-center space-x-2">
-                                    <button class="text-gray-400 hover:text-indigo-400 p-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
-                                    <button class="text-gray-400 hover:text-green-400 p-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></button>
-                                </div>
-                            </li>`).join('')}
-                        </ul>
-                    </div>`;
+                            </div>
+
+                            <!-- Issues by Department -->
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                ${Object.entries(issuesByDept).map(([deptKey, deptIssues]) => {
+                                    const dept = departments[deptKey];
+                                    return `
+                                        <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
+                                            <h3 class="font-semibold text-indigo-400 mb-3 flex justify-between items-center">
+                                                ${dept?.name || deptKey}
+                                                <span class="text-xs bg-gray-700 px-2 py-1 rounded">${deptIssues.length} issues</span>
+                                            </h3>
+                                            <ul class="space-y-2">
+                                                ${deptIssues.sort((a,b) => a.priority - b.priority).map(issue => `
+                                                    <li class="p-3 border rounded-lg ${priorityBg[issue.priority]}">
+                                                        <p class="text-sm font-medium text-gray-200">${issue.title}</p>
+                                                        <div class="flex justify-between items-center mt-2">
+                                                            <span class="text-xs ${priorityColors[issue.priority]}">Priority ${issue.priority} • ${issue.age} days</span>
+                                                            <div class="flex items-center space-x-1">
+                                                                <button class="edit-issue-btn text-gray-400 hover:text-indigo-400 p-1" data-issue-id="${issue.id}">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                                                                </button>
+                                                                <button class="delete-issue-btn text-gray-400 hover:text-red-400 p-1" data-issue-id="${issue.id}">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                `).join('')}
+                                            </ul>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    `;
                 },
                 departments() {
                     return `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${Object.keys(App.data.departments).map(key => {
@@ -553,133 +1794,320 @@
                                 </div>
                             </a>`;
                     }).join('')}</div>`;
-                },
-                departmentDetail(deptKey) {
-                    const dept = App.data.departments[deptKey];
-                    if (!dept) return `<p class="text-gray-400">Department not found.</p>`;
-                    const getNumber = (value) => {
-                        const parsed = parseFloat(String(value ?? '').replace(/[^0-9.-]/g, ''));
-                        return Number.isFinite(parsed) ? parsed : 0;
-                    };
-                    return `<div><a href="#departments" class="text-indigo-400 hover:text-indigo-300 mb-4 inline-block">&larr; Back to all departments</a></div>
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            <div class="lg:col-span-2 space-y-6">
-                                <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
-                                    <h3 class="text-xl font-bold text-white mb-4">Rocks</h3>
-                                    <ul class="space-y-3">${(dept.rocks || []).map(rock => `
-                                        <li class="p-3 border rounded-lg flex justify-between items-center ${rock.status === 'Off Track' ? 'border-rose-500/40 bg-rose-500/10' : rock.status === 'Done' ? 'border-indigo-500/30 bg-indigo-500/10' : 'border-emerald-500/30 bg-emerald-500/10'}">
-                                            <div>
-                                                <p class="font-semibold text-gray-100">${rock.title}</p>
-                                                <p class="text-xs text-gray-400">${rock.owner}</p>
-                                            </div>
-                                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-900/60 text-gray-200">${rock.status}</span>
-                                        </li>`).join('') || '<li class="text-gray-500">No rocks assigned.</li>'}</ul>
-                                </div>
-                                <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
-                                    <h3 class="text-xl font-bold text-white mb-4">Scorecard</h3>
-                                    <ul class="space-y-2">${(dept.scorecard || []).map(item => {
-                                        const goal = getNumber(item.goal);
-                                        const value = getNumber(item.value);
-                                        const isTimeMetric = item.metric.toLowerCase().includes('time');
-                                        const onTarget = isTimeMetric ? value <= goal : value >= goal;
-                                        return `<li class="flex justify-between items-center p-3 rounded border ${onTarget ? 'border-emerald-500/30 bg-emerald-500/10' : 'border-rose-500/40 bg-rose-500/10'}">
-                                                <span class="text-gray-200">${item.metric}</span>
-                                                <div class="text-right">
-                                                    <p class="font-semibold text-white">${item.value}</p>
-                                                    <p class="text-xs text-gray-400">Goal: ${item.goal}</p>
-                                                </div>
-                                            </li>`;
-                                    }).join('') || '<li class="text-gray-500">No scorecard metrics yet.</li>'}</ul>
-                                </div>
-                            </div>
-                            <div class="space-y-6">
-                                <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
-                                    <h3 class="text-xl font-bold text-white mb-4">Team</h3>
-                                    <ul class="space-y-2">
-                                        <li class="font-semibold text-gray-100">${dept.head} <span class="text-xs text-gray-400">(Head)</span></li>
-                                        ${(dept.members || []).map(member => `<li class="text-gray-300">${member}</li>`).join('')}
-                                    </ul>
-                                </div>
-                                <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
-                                    <h3 class="text-xl font-bold text-white mb-4">Issues</h3>
-                                    <ul class="space-y-2 list-disc list-inside text-gray-300">${(dept.issues || []).map(issue => `<li>${issue.title}</li>`).join('') || '<li class="text-gray-500">No issues reported.</li>'}</ul>
-                                </div>
-                            </div>
-                        </div>`;
-                },
+},
                 rocks() {
+                    const { companyRocks, departmentRocks, individualRocks } = App.data;
                     const statusColors = { "On Track": "border-blue-500", "Off Track": "border-red-500", "Done": "border-green-500" };
-                    return `<div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold text-white">Company Rocks</h2></div>
-                        <div class="space-y-4">
-                        ${App.data.companyRocks.map(rock => `
-                            <div class="bg-gray-800 border-l-4 ${statusColors[rock.status]} rounded-r-lg p-4 flex flex-col sm:flex-row justify-between sm:items-center">
-                                <div class="mb-4 sm:mb-0">
-                                    <p class="font-semibold text-lg text-white">${rock.title}</p>
-                                    <span class="text-sm text-gray-400">${rock.owner}</span>
+                    const statusBg = { "On Track": "bg-blue-500/20 text-blue-300", "Off Track": "bg-red-500/20 text-red-300", "Done": "bg-green-500/20 text-green-300" };
+
+                    return `
+                        <div class="space-y-6">
+                            <!-- Company Rocks -->
+                            <div>
+                                <div class="flex justify-between items-center mb-4">
+                                    <h2 class="text-2xl font-bold text-white">Company Rocks - ${companyRocks[0]?.quarter || 'Q4 2025'}</h2>
+                                    <button id="add-company-rock-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-500" data-rock-type="company">+ Add Rock</button>
                                 </div>
-                                <div class="flex items-center space-x-2 self-end sm:self-center">
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full ${rock.team === 'Dev' ? 'bg-purple-500/20 text-purple-300' : rock.team === 'Marketing' ? 'bg-pink-500/20 text-pink-300' : 'bg-yellow-500/20 text-yellow-300'}">${rock.team}</span>
-                                    <select class="rock-status-select bg-gray-700 border border-gray-600 rounded-md p-1 text-sm" data-rock-id="${rock.id}">
-                                        <option value="On Track" ${rock.status === 'On Track' ? 'selected' : ''}>On Track</option>
-                                        <option value="Off Track" ${rock.status === 'Off Track' ? 'selected' : ''}>Off Track</option>
-                                        <option value="Done" ${rock.status === 'Done' ? 'selected' : ''}>Done</option>
-                                    </select>
+                                <div class="grid gap-4">
+                                    ${companyRocks.map(rock => `
+                                        <div class="bg-gray-800 border-l-4 ${statusColors[rock.status]} rounded-r-lg p-4">
+                                            <div class="flex justify-between items-start">
+                                                <div class="flex-1">
+                                                    <p class="font-semibold text-lg text-white">${rock.title || rock.name}</p>
+                                                    <p class="text-sm text-gray-400 mt-1">Owner: ${rock.owner}</p>
+                                                    ${rock.notes ? `<p class="text-xs text-gray-500 mt-2">${rock.notes}</p>` : ''}
+                                                </div>
+                                                <div class="flex items-center space-x-2">
+                                                    <span class="px-2 py-1 text-xs rounded-full ${statusBg[rock.status]}">${rock.status}</span>
+                                                    ${rock.team ? `<span class="px-2 py-1 text-xs rounded-full bg-gray-700 text-gray-300">${rock.team}</span>` : ''}
+                                                    <button class="edit-rock-btn text-gray-400 hover:text-indigo-400 ml-2" data-rock-id="${rock.id}" data-rock-type="company">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
                                 </div>
-                            </div>`).join('')}
-                        </div>`;
-                },
-                data() {
-                    return `<div class="space-y-6">
-                        <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
-                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-                                <h2 class="text-2xl font-bold text-white">Company Scorecard</h2>
-                                <button id="save-snapshot-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-500">Save as This Week's Snapshot</button>
                             </div>
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-left text-sm">
-                                    <thead class="bg-gray-900/60">
-                                        <tr>
-                                            <th class="p-4 font-semibold text-gray-300">Metric</th>
-                                            <th class="p-4 font-semibold text-gray-300">Goal</th>
-                                            <th class="p-4 font-semibold text-gray-300">Actual</th>
-                                            <th class="p-4 font-semibold text-gray-300">Trend (4 weeks)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${App.data.scorecard.map((item, index) => {
-                                            const numGoal = parseFloat(String(item.goal).replace(/[^0-9.-]/g, '')) || 0;
-                                            const numValue = parseFloat(String(item.value).replace(/[^0-9.-]/g, '')) || 0;
-                                            const isTimeMetric = item.metric.toLowerCase().includes('time');
-                                            const onTarget = isTimeMetric ? numValue <= numGoal : numValue >= numGoal;
-                                            return `
-                                                <tr class="border-b border-gray-700 hover:bg-gray-900/40">
-                                                    <td class="p-4 font-medium text-gray-200">${item.metric}</td>
-                                                    <td class="p-4 text-gray-400">${item.goal}</td>
-                                                    <td class="p-4">
-                                                        <input type="text" class="scorecard-input bg-gray-900 border border-gray-700 rounded-md p-2 w-28 text-right text-gray-200" value="${item.value}" data-index="${index}">
-                                                    </td>
-                                                    <td class="p-4">
-                                                        <div class="w-28 h-16">
-                                                            <canvas class="scorecard-chart" data-trend='${JSON.stringify(item.trend)}' data-good="${onTarget}"></canvas>
-                                                        </div>
-                                                    </td>
-                                                </tr>`;
-                                        }).join('')}
-                                    </tbody>
-                                </table>
+
+                            <!-- Department Rocks -->
+                            <div>
+                                <div class="flex justify-between items-center mb-4">
+                                    <h2 class="text-xl font-bold text-white">Department Rocks</h2>
+                                    <button id="add-dept-rock-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-500" data-rock-type="department">+ Add Dept Rock</button>
+                                </div>
+                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                    ${Object.entries(departmentRocks || {}).map(([dept, rocks]) => `
+                                        <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
+                                            <h3 class="font-semibold text-indigo-400 mb-3">${App.data.departments[dept]?.name || dept}</h3>
+                                            <div class="space-y-3">
+                                                ${rocks.map(rock => `
+                                                    <div class="border-l-4 ${statusColors[rock.status]} pl-3 relative group">
+                                                        <p class="text-sm text-white">${rock.title || rock.name}</p>
+                                                        <p class="text-xs text-gray-400">${rock.owner}</p>
+                                                        <span class="inline-block mt-1 px-2 py-1 text-xs rounded ${statusBg[rock.status]}">${rock.status}</span>
+                                                        <button class="edit-rock-btn absolute top-0 right-0 text-gray-400 hover:text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity" data-rock-id="${rock.id}" data-rock-type="department" data-dept="${dept}">
+                                                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
+                                                        </button>
+                                                    </div>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <!-- Individual Rocks -->
+                            <div>
+                                <div class="flex justify-between items-center mb-4">
+                                    <h2 class="text-xl font-bold text-white">Individual Rocks</h2>
+                                    <button id="add-individual-rock-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-500" data-rock-type="individual">+ Add Individual Rock</button>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    ${(individualRocks || []).map(rock => `
+                                        <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
+                                            <div class="flex justify-between items-start">
+                                                <div class="flex-1">
+                                                    <p class="font-medium text-white">${rock.title || rock.name}</p>
+                                                    <p class="text-sm text-gray-400 mt-1">${rock.employeeName || rock.owner} • ${App.data.departments[rock.department]?.name || rock.department || ''}</p>
+                                                </div>
+                                                <div class="flex items-center space-x-2">
+                                                    <span class="px-2 py-1 text-xs rounded-full ${statusBg[rock.status]}">${rock.status}</span>
+                                                    <button class="edit-rock-btn text-gray-400 hover:text-indigo-400" data-rock-id="${rock.id}" data-rock-type="individual" data-owner="${rock.owner || rock.employeeName}">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
                             </div>
                         </div>
-                    </div>`;
+                    `;
+                },
+                data() {
+                    const { scorecard, departmentalScorecards, departments } = App.data;
+
+                    return `
+                        <div class="space-y-6">
+                            <!-- Company Scorecard -->
+                            <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                                    <h2 class="text-2xl font-bold text-white">Company Scorecard</h2>
+                                    <div class="flex gap-2">
+                                        <button id="add-metric-btn" class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-500" data-scorecard-type="company">+ Add Metric</button>
+                                        <button id="view-history-btn" class="bg-gray-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-600">View History</button>
+                                        <button id="save-snapshot-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-500">Save Snapshot</button>
+                                    </div>
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-left text-sm">
+                                        <thead class="bg-gray-900/60">
+                                            <tr>
+                                                <th class="p-4 font-semibold text-gray-300">Metric</th>
+                                                <th class="p-4 font-semibold text-gray-300">Goal</th>
+                                                <th class="p-4 font-semibold text-gray-300">Actual</th>
+                                                <th class="p-4 font-semibold text-gray-300">Trend (4 weeks)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${scorecard.map((item, index) => {
+                                                const numGoal = parseFloat(String(item.goal).replace(/[^0-9.-]/g, '')) || 0;
+                                                const numValue = parseFloat(String(item.value).replace(/[^0-9.-]/g, '')) || 0;
+                                                const isTimeMetric = item.metric.toLowerCase().includes('time');
+                                                const onTarget = isTimeMetric ? numValue <= numGoal : numValue >= numGoal;
+                                                return `
+                                                    <tr class="border-b border-gray-700 hover:bg-gray-900/40">
+                                                        <td class="p-4 font-medium text-gray-200">${item.metric}</td>
+                                                        <td class="p-4 text-gray-400">${item.goal}</td>
+                                                        <td class="p-4">
+                                                            <input type="text" class="scorecard-input bg-gray-900 border border-gray-700 rounded-md p-2 w-28 text-right text-gray-200" value="${item.value}" data-index="${index}" data-type="company">
+                                                        </td>
+                                                        <td class="p-4">
+                                                            <div class="w-28 h-16">
+                                                                <canvas class="scorecard-chart" data-trend='${JSON.stringify(item.trend)}' data-good="${onTarget}"></canvas>
+                                                            </div>
+                                                        </td>
+                                                    </tr>`;
+                                            }).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Departmental Scorecards -->
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                ${Object.entries(departmentalScorecards || {}).map(([deptKey, deptScorecard]) => {
+                                    const dept = departments[deptKey];
+                                    return `
+                                        <div class="bg-gray-800 border border-gray-700 p-4 rounded-lg">
+                                            <h3 class="text-lg font-semibold text-indigo-400 mb-3">${dept?.name || deptKey} Scorecard</h3>
+                                            <div class="space-y-3">
+                                                ${deptScorecard.map((item, idx) => {
+                                                    const numGoal = parseFloat(String(item.goal).replace(/[^0-9.-]/g, '')) || 0;
+                                                    const numValue = parseFloat(String(item.value).replace(/[^0-9.-]/g, '')) || 0;
+                                                    const isTimeMetric = item.metric.toLowerCase().includes('time') || item.metric.toLowerCase().includes('days');
+                                                    const onTarget = isTimeMetric ? numValue <= numGoal : numValue >= numGoal;
+                                                    return `
+                                                        <div class="border-l-4 ${onTarget ? 'border-emerald-500' : 'border-rose-500'} pl-3">
+                                                            <p class="text-xs text-gray-400">${item.metric}</p>
+                                                            <div class="flex justify-between items-center">
+                                                                <input type="text" class="dept-scorecard-input bg-gray-900 border border-gray-700 rounded p-1 w-20 text-sm text-right text-gray-200" value="${item.value}" data-dept="${deptKey}" data-index="${idx}">
+                                                                <span class="text-xs text-gray-500">Goal: ${item.goal}</span>
+                                                            </div>
+                                                        </div>
+                                                    `;
+                                                }).join('')}
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    `;
                 },
                 l10() {
                     return `<div class="flex border-b border-gray-700 mb-4"><button id="l10-tab-live" class="px-4 py-2 font-semibold border-b-2 border-indigo-500 text-indigo-400">Live Meeting</button><button id="l10-tab-history" class="px-4 py-2 font-semibold text-gray-500 hover:text-gray-300">History & AI Insights</button></div><div id="l10-content"></div>`;
                 },
+                departmentDetail(deptKey) {
+                    const dept = App.data.departments[deptKey];
+                    if (!dept) return `<p class="text-gray-400">Department not found.</p>`;
+
+                    const deptRocks = App.data.departmentRocks[deptKey] || [];
+                    const deptIssues = App.data.issues.filter(i => i.department === deptKey);
+                    const deptIndividualRocks = App.data.individualRocks.filter(r => r.department === deptKey);
+                    const deptScorecard = App.data.departmentalScorecards[deptKey] || [];
+                    const deptMeetings = App.data.meetingHistory.filter(m => m.department === deptKey).slice(0, 3);
+                    const deptTodos = App.data.todos.filter(t => t.department === deptKey && !t.completed);
+
+                    const getNumber = (value) => {
+                        const parsed = parseFloat(String(value ?? '').replace(/[^0-9.-]/g, ''));
+                        return Number.isFinite(parsed) ? parsed : 0;
+                    };
+
+                    return `
+                        <div><a href="#departments" class="text-indigo-400 hover:text-indigo-300 mb-4 inline-block">&larr; Back to all departments</a></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div class="lg:col-span-2 space-y-6">
+                                <!-- Department Scorecard -->
+                                <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
+                                    <h3 class="text-xl font-bold text-white mb-4">Department Scorecard</h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        ${deptScorecard.map(item => {
+                                            const goal = getNumber(item.goal);
+                                            const value = getNumber(item.value);
+                                            const isTimeMetric = item.metric.toLowerCase().includes('time') || item.metric.toLowerCase().includes('days');
+                                            const onTarget = isTimeMetric ? value <= goal : value >= goal;
+                                            return `
+                                                <div class="border ${onTarget ? 'border-emerald-500/30 bg-emerald-500/10' : 'border-rose-500/40 bg-rose-500/10'} rounded-lg p-3">
+                                                    <p class="text-sm text-gray-300">${item.metric}</p>
+                                                    <p class="text-xl font-bold text-white">${item.value}</p>
+                                                    <p class="text-xs text-gray-400">Goal: ${item.goal}</p>
+                                                    <div class="mt-2 h-8 w-full">
+                                                        <canvas class="scorecard-chart" data-trend='${JSON.stringify(item.trend || [])}' data-good="${onTarget}"></canvas>
+                                                    </div>
+                                                </div>
+                                            `;
+                                        }).join('') || '<p class="text-gray-500">No scorecard metrics defined.</p>'}
+                                    </div>
+                                </div>
+
+                                <!-- Department Rocks -->
+                                <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
+                                    <h3 class="text-xl font-bold text-white mb-4">Department Rocks</h3>
+                                    <ul class="space-y-3">
+                                        ${deptRocks.map(rock => `
+                                            <li class="p-3 border rounded-lg flex justify-between items-center ${rock.status === 'Off Track' ? 'border-rose-500/40 bg-rose-500/10' : rock.status === 'Done' ? 'border-indigo-500/30 bg-indigo-500/10' : 'border-emerald-500/30 bg-emerald-500/10'}">
+                                                <div>
+                                                    <p class="font-semibold text-gray-100">${rock.title}</p>
+                                                    <p class="text-xs text-gray-400">${rock.owner}</p>
+                                                </div>
+                                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-900/60 text-gray-200">${rock.status}</span>
+                                            </li>
+                                        `).join('') || '<li class="text-gray-500">No department rocks assigned.</li>'}
+                                    </ul>
+                                </div>
+
+                                <!-- Individual Rocks -->
+                                <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
+                                    <h3 class="text-xl font-bold text-white mb-4">Individual Rocks</h3>
+                                    <ul class="space-y-3">
+                                        ${deptIndividualRocks.map(rock => `
+                                            <li class="p-3 border rounded-lg ${rock.status === 'Off Track' ? 'border-rose-500/40 bg-rose-500/10' : rock.status === 'Done' ? 'border-indigo-500/30 bg-indigo-500/10' : 'border-emerald-500/30 bg-emerald-500/10'}">
+                                                <p class="font-medium text-gray-100">${rock.title}</p>
+                                                <div class="flex justify-between items-center mt-1">
+                                                    <p class="text-xs text-gray-400">${rock.employeeName}</p>
+                                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-900/60 text-gray-200">${rock.status}</span>
+                                                </div>
+                                            </li>
+                                        `).join('') || '<li class="text-gray-500">No individual rocks in this department.</li>'}
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="space-y-6">
+                                <!-- Team -->
+                                <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
+                                    <h3 class="text-xl font-bold text-white mb-4">Team</h3>
+                                    <ul class="space-y-2">
+                                        <li class="font-semibold text-gray-100">${dept.head} <span class="text-xs text-gray-400">(Head)</span></li>
+                                        ${(dept.members || []).map((member, idx) => {
+                                            const empId = dept.memberIds[idx];
+                                            const emp = App.data.employees.find(e => e.id === empId);
+                                            return `<li class="text-gray-300">${member} ${emp ? `<span class="text-xs text-gray-500">- ${emp.role}</span>` : ''}</li>`;
+                                        }).join('')}
+                                    </ul>
+                                </div>
+
+                                <!-- Department Issues -->
+                                <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
+                                    <h3 class="text-xl font-bold text-white mb-4">Issues</h3>
+                                    <ul class="space-y-2">
+                                        ${deptIssues.map(issue => `
+                                            <li class="p-2 bg-gray-900/50 rounded">
+                                                <p class="text-sm text-gray-200">${issue.title}</p>
+                                                <p class="text-xs text-gray-400 mt-1">Priority ${issue.priority} • ${issue.age} days old</p>
+                                            </li>
+                                        `).join('') || '<li class="text-gray-500">No issues reported.</li>'}
+                                    </ul>
+                                </div>
+
+                                <!-- Active To-Dos -->
+                                <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
+                                    <h3 class="text-xl font-bold text-white mb-4">Active To-Dos</h3>
+                                    <ul class="space-y-2">
+                                        ${deptTodos.map(todo => `
+                                            <li class="p-2 bg-gray-900/50 rounded">
+                                                <p class="text-sm text-gray-200">${todo.task}</p>
+                                                <p class="text-xs text-gray-400 mt-1">${todo.assignee} • Due ${todo.dueDate}</p>
+                                            </li>
+                                        `).join('') || '<li class="text-gray-500">No active to-dos.</li>'}
+                                    </ul>
+                                </div>
+
+                                <!-- Recent Meetings -->
+                                <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
+                                    <h3 class="text-xl font-bold text-white mb-4">Recent L10 Meetings</h3>
+                                    <ul class="space-y-2">
+                                        ${deptMeetings.map(meeting => `
+                                            <li class="p-2 bg-gray-900/50 rounded">
+                                                <p class="text-sm font-medium text-gray-200">${meeting.date}</p>
+                                                <p class="text-xs text-gray-400 mt-1">Rating: ${meeting.rating}/10</p>
+                                                ${meeting.transcriptionUrl ? `<a href="${meeting.transcriptionUrl}" target="_blank" class="text-xs text-indigo-400 hover:underline">View Recording</a>` : ''}
+                                            </li>
+                                        `).join('') || '<li class="text-gray-500">No recent meetings.</li>'}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
             },
             
             renderCharts() {
                 const salesCanvas = document.getElementById('salesChart');
                 if (salesCanvas && App.data.scorecard[0]?.trend) {
-                    new Chart(salesCanvas, {
+                    const chart = new Chart(salesCanvas, {
                         type: 'line',
                         data: {
                             labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
@@ -701,12 +2129,13 @@
                             }
                         }
                     });
+                    this._charts.push(chart);
                 }
 
                 document.querySelectorAll('.scorecard-chart').forEach(canvas => {
                     const trendData = JSON.parse(canvas.dataset.trend || '[]');
                     const isGood = canvas.dataset.good === 'true';
-                    new Chart(canvas, {
+                    const chart = new Chart(canvas, {
                         type: 'line',
                         data: {
                             labels: Array(trendData.length).fill(''),
@@ -726,6 +2155,7 @@
                             scales: { x: { display: false }, y: { display: false } }
                         }
                     });
+                    this._charts.push(chart);
                 });
             },
 
@@ -733,8 +2163,28 @@
                 const liveTab = document.getElementById('l10-tab-live');
                 const historyTab = document.getElementById('l10-tab-history');
                 const contentContainer = document.getElementById('l10-content');
+                const deptSelect = document.getElementById('l10-department-select');
                 let timerInterval;
                 let currentStep = 0;
+                let currentMeetingData = {
+                    department: 'company',
+                    segueNotes: '',
+                    cascadeMessage: '',
+                    rating: null,
+                    completedTodos: [],
+                    createdTodos: []
+                };
+
+                // Handle department selection
+                if (deptSelect) {
+                    deptSelect.addEventListener('change', (e) => {
+                        App.currentL10Department = e.target.value;
+                        currentMeetingData.department = e.target.value;
+                        if (currentStep > 0) {
+                            renderL10Step();
+                        }
+                    });
+                }
 
                 const addIssue = (title, priority = 3) => {
                     if (!title || !title.trim()) return;
@@ -754,7 +2204,55 @@
                 };
 
                 const L10_CONTENT = {
-                    segue: () => `<h4 class="font-bold text-gray-100 mb-2">Good News</h4><p class="text-gray-400 mb-4">Each team member shares one personal and one business win from the past week.</p><textarea class="w-full p-3 border border-gray-700 rounded bg-gray-900 text-gray-100 focus:outline-none focus:border-indigo-500" rows="4" placeholder="Capture notes here..."></textarea>`,
+                    segue: () => `
+                        <div class="space-y-4">
+                            <h4 class="font-bold text-gray-100 mb-2">Good News</h4>
+                            <p class="text-gray-400 mb-4">Each team member shares one personal and one business win from the past week.</p>
+
+                            <!-- Google Meet Sync Status -->
+                            <div class="bg-gray-900 border border-gray-700 rounded-lg p-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="relative">
+                                            <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                            <div class="absolute top-0 left-0 w-3 h-3 bg-green-500 rounded-full animate-ping"></div>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-300">Google Meet Connected</span>
+                                        <span class="text-xs text-gray-500">Last sync: 2 mins ago</span>
+                                    </div>
+                                    <button id="sync-meet-btn" class="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1 rounded-lg text-sm">
+                                        <svg class="w-4 h-4 animate-spin hidden" id="sync-spinner" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        <span>Sync Now</span>
+                                    </button>
+                                </div>
+
+                                <!-- Meeting Recording Info -->
+                                <div class="bg-gray-800 rounded-lg p-3">
+                                    <div class="flex items-start space-x-3">
+                                        <div class="bg-red-600 rounded-lg p-2">
+                                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-medium text-gray-200">Meeting Recording Available</p>
+                                            <p class="text-xs text-gray-400">Duration: 1:32:45 • 8 participants</p>
+                                            <div class="flex space-x-2 mt-2">
+                                                <button class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-2 py-1 rounded">View Recording</button>
+                                                <button class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-2 py-1 rounded">Download Transcript</button>
+                                                <button class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-2 py-1 rounded">Auto-Generate Notes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <textarea class="w-full p-3 border border-gray-700 rounded bg-gray-900 text-gray-100 focus:outline-none focus:border-indigo-500" rows="4" placeholder="Capture notes here..."></textarea>
+                        </div>
+                    `,
                     scorecard: () => `${App.data.scorecard.map((item, index) => {
                         const goal = parseFloat(String(item.goal).replace(/[^0-9.-]/g, '')) || 0;
                         const value = parseFloat(String(item.value).replace(/[^0-9.-]/g, '')) || 0;
@@ -780,18 +2278,99 @@
                                     <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-6"></div>
                                 </label>
                             </div>`).join('')}`,
-                    headlines: () => `<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <h4 class="font-bold text-gray-100 mb-2">Customer Headlines</h4>
-                                    <textarea id="customer-headline" class="w-full p-3 border border-gray-700 rounded bg-gray-900 text-gray-100 focus:outline-none focus:border-indigo-500" rows="3" placeholder="Customer wins or issues..."></textarea>
-                                    <button class="add-headline-btn mt-2 text-xs bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-500" data-source="customer-headline">Add to IDS</button>
+                    headlines: () => `
+                        <div class="space-y-6">
+                            <!-- Customer Headlines Table -->
+                            <div>
+                                <div class="flex justify-between items-center mb-3">
+                                    <h4 class="font-bold text-gray-100">Customer Headlines</h4>
+                                    <button id="add-customer-headline" class="text-sm bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded">+ Add Row</button>
                                 </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-100 mb-2">Employee Headlines</h4>
-                                    <textarea id="employee-headline" class="w-full p-3 border border-gray-700 rounded bg-gray-900 text-gray-100 focus:outline-none focus:border-indigo-500" rows="3" placeholder="Team shout-outs or concerns..."></textarea>
-                                    <button class="add-headline-btn mt-2 text-xs bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-500" data-source="employee-headline">Add to IDS</button>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-sm">
+                                        <thead class="bg-gray-900/60">
+                                            <tr>
+                                                <th class="p-2 text-left text-gray-400">Customer</th>
+                                                <th class="p-2 text-left text-gray-400">Issue/Win</th>
+                                                <th class="p-2 text-left text-gray-400">Priority</th>
+                                                <th class="p-2 text-left text-gray-400">Department</th>
+                                                <th class="p-2 text-center text-gray-400">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="customer-headlines-table">
+                                            <tr class="border-b border-gray-700">
+                                                <td class="p-2"><input type="text" class="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-100" placeholder="Customer name..."></td>
+                                                <td class="p-2"><input type="text" class="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-100" placeholder="Issue or win..."></td>
+                                                <td class="p-2">
+                                                    <select class="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-100">
+                                                        <option>Low</option>
+                                                        <option>Medium</option>
+                                                        <option>High</option>
+                                                    </select>
+                                                </td>
+                                                <td class="p-2">
+                                                    <select class="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-100">
+                                                        <option>Sales</option>
+                                                        <option>Support</option>
+                                                        <option>Product</option>
+                                                        <option>Engineering</option>
+                                                    </select>
+                                                </td>
+                                                <td class="p-2 text-center">
+                                                    <button class="customer-to-ids text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-2 py-1 rounded">Add to IDS</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                            </div>`,
+                            </div>
+
+                            <!-- Employee Headlines Table -->
+                            <div>
+                                <div class="flex justify-between items-center mb-3">
+                                    <h4 class="font-bold text-gray-100">Employee Headlines</h4>
+                                    <button id="add-employee-headline" class="text-sm bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded">+ Add Row</button>
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-sm">
+                                        <thead class="bg-gray-900/60">
+                                            <tr>
+                                                <th class="p-2 text-left text-gray-400">Employee</th>
+                                                <th class="p-2 text-left text-gray-400">Department</th>
+                                                <th class="p-2 text-left text-gray-400">Headline</th>
+                                                <th class="p-2 text-left text-gray-400">Type</th>
+                                                <th class="p-2 text-center text-gray-400">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="employee-headlines-table">
+                                            <tr class="border-b border-gray-700">
+                                                <td class="p-2"><input type="text" class="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-100" placeholder="Employee name..."></td>
+                                                <td class="p-2">
+                                                    <select class="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-100">
+                                                        <option>Engineering</option>
+                                                        <option>Marketing</option>
+                                                        <option>Sales</option>
+                                                        <option>Operations</option>
+                                                    </select>
+                                                </td>
+                                                <td class="p-2"><input type="text" class="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-100" placeholder="Headline..."></td>
+                                                <td class="p-2">
+                                                    <select class="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-100">
+                                                        <option>Win</option>
+                                                        <option>Issue</option>
+                                                        <option>Update</option>
+                                                    </select>
+                                                </td>
+                                                <td class="p-2 text-center">
+                                                    <button class="employee-to-ids text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-2 py-1 rounded">Add to IDS</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    `,
                     toDoList: () => {
                         const openTodos = App.data.l10Data.lastWeeksToDos.filter(todo => !todo.completed);
                         return `<h4 class="font-bold text-gray-100 mb-2">To-Do List</h4>
@@ -1013,8 +2592,110 @@
                 });
 
                 showLiveMeeting();
+            },
+
+            integrations() {
+                return `
+                    <div class="space-y-6">
+                        <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg">
+                            <h2 class="text-2xl font-bold text-white mb-6">Integration Dashboard</h2>
+
+                            <!-- Live Status Bar -->
+                            <div class="bg-gray-900 rounded-lg p-4 mb-6 flex items-center justify-between">
+                                <div class="flex items-center space-x-6">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="relative">
+                                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                            <div class="absolute top-0 left-0 w-3 h-3 bg-green-500 rounded-full animate-ping"></div>
+                                        </div>
+                                        <span class="text-sm text-gray-300">All Systems Operational</span>
+                                    </div>
+                                    <div class="text-xs text-gray-500">Last check: 30 seconds ago</div>
+                                </div>
+                                <button class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm">Run Full Sync</button>
+                            </div>
+
+                            <!-- Integration Cards Grid -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <!-- Google Meet Card -->
+                                <div class="bg-gray-900 border border-gray-700 rounded-lg p-5">
+                                    <div class="flex items-start justify-between mb-4">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h3 class="font-semibold text-white">Google Meet</h3>
+                                                <p class="text-xs text-green-400">Connected</p>
+                                            </div>
+                                        </div>
+                                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                    </div>
+                                    <div class="space-y-2 text-xs text-gray-400">
+                                        <div class="flex justify-between">
+                                            <span>Last Sync:</span>
+                                            <span class="text-gray-300">2 mins ago</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>Meetings Synced:</span>
+                                            <span class="text-gray-300">142</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>Transcripts:</span>
+                                            <span class="text-gray-300">89 available</span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 flex space-x-2">
+                                        <button class="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1 rounded text-xs">Settings</button>
+                                        <button class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1 rounded text-xs google-meet-sync">Sync Now</button>
+                                    </div>
+                                </div>
+
+                                <!-- Webhook Card -->
+                                <div class="bg-gray-900 border border-gray-700 rounded-lg p-5">
+                                    <div class="flex items-start justify-between mb-4">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
+                                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h3 class="font-semibold text-white">Webhooks</h3>
+                                                <p class="text-xs text-green-400">3 Active</p>
+                                            </div>
+                                        </div>
+                                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    </div>
+                                    <div class="space-y-2 text-xs text-gray-400">
+                                        <div class="flex justify-between">
+                                            <span>Events Today:</span>
+                                            <span class="text-gray-300">247</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>Success Rate:</span>
+                                            <span class="text-green-400">99.8%</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>Avg Response:</span>
+                                            <span class="text-gray-300">120ms</span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 flex space-x-2">
+                                        <button class="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1 rounded text-xs">View Logs</button>
+                                        <button class="flex-1 bg-purple-600 hover:bg-purple-500 text-white px-3 py-1 rounded text-xs simulate-webhook">Test Hook</button>
+                                    </div>
+                                </div>
+
+                                <!-- Other integration cards remain the same... -->
+                            </div>
+                        </div>
+                    </div>
+                `;
             }
-        };
+        }
 
         document.addEventListener('DOMContentLoaded', () => App.init());
     </script>
