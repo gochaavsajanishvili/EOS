@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zuma EOS Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        #menu-button-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+        .main-content {
+            transition: margin-left 0.3s ease-in-out;
+        }
+        .nav-link.active {
+            background-color: #4f46e5;
+            color: white;
+        }
+        .kanban-card {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        .l10-timer {
+            font-variant-numeric: tabular-nums;
+        }
+        .accountability-chart-node {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            background-color: white;
+            text-align: center;
+        }
+        .accountability-chart-line {
+            border-left: 2px solid #d1d5db;
+            height: 2rem;
+            margin: 0 auto;
+        }
+        .accountability-chart-branch {
+            display: flex;
+            justify-content: center;
+        }
+        .accountability-chart-branch > div {
+            padding: 0 1rem;
+        }
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #4f46e5;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #4f46e5;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Mobile Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden md:hidden"></div>
+
+    <div class="relative min-h-screen md:flex">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="bg-gray-800 text-white w-64 space-y-6 py-7 px-2 fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 sidebar z-30">
+            <a href="#" class="text-white flex items-center space-x-2 px-4">
+                <i class="fas fa-rocket text-2xl"></i>
+                <span class="text-2xl font-extrabold">Zuma EOS</span>
+            </a>
+
+            <nav>
+                <a href="#dashboard" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 active">
+                    <i class="fas fa-tachometer-alt w-6 mr-2"></i> Dashboard
+                </a>
+                <a href="#vto" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+                    <i class="fas fa-bullseye w-6 mr-2"></i> V/TO
+                </a>
+                <a href="#departments" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+                    <i class="fas fa-building w-6 mr-2"></i> Departments
+                </a>
+                <a href="#people" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+                    <i class="fas fa-users w-6 mr-2"></i> People
+                </a>
+                <a href="#data" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+                    <i class="fas fa-chart-line w-6 mr-2"></i> Data
+                </a>
+                <a href="#issues" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+                    <i class="fas fa-lightbulb w-6 mr-2"></i> Issues
+                </a>
+                <a href="#rocks" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+                    <i class="fas fa-gem w-6 mr-2"></i> Rocks
+                </a>
+                <a href="#l10" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-indigo-600 bg-indigo-500 font-bold">
+                    <i class="fas fa-users-gear w-6 mr-2"></i> Level 10 Meeting
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden main-content">
+             <!-- New Menu Button -->
+            <button id="menu-button" class="fixed top-1/2 -translate-y-1/2 left-0 z-40 bg-indigo-600 text-white w-8 h-16 rounded-r-lg focus:outline-none shadow-lg md:hidden">
+                 <i id="menu-button-icon" class="fas fa-chevron-right"></i>
+            </button>
+            <header class="flex justify-end items-center p-4 bg-white border-b-2 border-gray-200">
+                 <div class="flex items-center space-x-4">
+                    <i class="fas fa-bell text-gray-500"></i>
+                    <div class="flex items-center">
+                         <img src="https://placehold.co/40x40/6D28D9/FFFFFF?text=AY" alt="User Avatar" class="w-10 h-10 rounded-full">
+                         <div class="ml-2">
+                             <p class="text-sm font-semibold text-gray-700">Asfand Yaar</p>
+                             <p class="text-xs text-gray-500">Visionary / Integrator</p>
+                         </div>
+                    </div>
+                 </div>
+            </header>
+            
+            <div class="flex-1 p-4 sm:p-6 overflow-y-auto">
+                 <h1 id="page-title" class="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
+                 <main id="main-app">
+                    <!-- Page content will be injected here -->
+                 </main>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const App = {
+            data: {
+                companyName: "Zuma",
+                cto: "Asfand Yaar",
+                vto: {
+                    coreValues: ["Customer First", "Innovate & Simplify", "Own It", "Get It Done Right", "Team Player"],
+                    coreFocus: {
+                        purpose: "To be the most trusted and efficient online source for aerial lift equipment and parts.",
+                        niche: "Providing high-quality used aerial lifts and parts with exceptional digital experience."
+                    },
+                    tenYearTarget: "To be the #1 online destination for aerial lifts in North America.",
+                    marketingStrategy: {
+                        targetMarket: "Construction companies, equipment rental businesses, and maintenance contractors in North America.",
+                        threeUniques: ["Unified Listing Platform for maximum reach", "In-house tech for superior customer experience (TIP)", "Deep industry expertise and transparent inspections."],
+                        provenProcess: "Source -> Inspect (TIP) -> Repair -> List (ULP) -> Sell -> Ship -> Support.",
+                        guarantee: "30-day parts warranty on all repaired machines."
+                    },
+                    threeYearPicture: "Achieve $50M in annual revenue. ULP lists on 10+ platforms. TIP is used by 5 external partners.",
+                    oneYearPlan: [
+                        "Launch zumasales.com v3 on Shopify Plus.",
+                        "Integrate Odoo with ULP for real-time inventory.",
+                        "Reduce average repair time by 15% using TIP data.",
+                        "Increase organic traffic to zuma.ca by 40%."
+                    ]
+                },
+                scorecard: [
+                    { metric: "Shopify Sales ($)", goal: "150,000", value: 165000, trend: [140, 155, 148, 165] },
+                    { metric: "ULP Listings Created", goal: "50", value: 45, trend: [52, 55, 48, 45] },
+                    { metric: "Machines Inspected (TIP)", goal: "25", value: 28, trend: [22, 24, 26, 28] },
+                    { metric: "Website Leads (zuma.ca)", goal: "100", value: 110, trend: [95, 105, 98, 110] },
+                    { metric: "Customer Satisfaction (CSAT)", goal: "95%", value: "96%", trend: [94, 95, 96, 96] },
+                    { metric: "Invoice Processing Time (hrs)", goal: "2", value: 1.5, trend: [2.5, 2.1, 1.8, 1.5] },
+                ],
+                companyRocks: [
+                    { id: 1, title: "ULP Craigslist Integration", owner: "Asfand Yaar", status: "On Track", team: "Dev" },
+                    { id: 2, title: "Q4 SEO Strategy for zuma.ca", owner: "Hamza Khan", status: "On Track", team: "Marketing" },
+                    { id: 3, title: "Streamline Shopify-Odoo Order Sync", owner: "Gocha Avsajanishvili", status: "Off Track", team: "Dev" },
+                    { id: 4, title: "Implement new TIP inspection template for Boom Lifts", owner: "Asfand Yaar", status: "On Track", team: "Ops" },
+                ],
+                issues: [
+                    { id: 1, title: "Odoo sync with Shopify is lagging by 30 mins", priority: 1, age: 5 },
+                    { id: 2, title: "Need to define Q4 marketing budget for new ad campaigns", priority: 2, age: 12 },
+                    { id: 3, title: "High volume of support tickets for zumasales.com checkout process", priority: 1, age: 2 },
+                    { id: 4, title: "Recruitment plan for new Senior SEO Writer", priority: 3, age: 20 },
+                    { id: 5, title: "Inconsistent photo quality from TIP inspections", priority: 2, age: 8 },
+                ],
+                 meetingHistory: [
+                    { date: "Sep 22, 2025", rating: 9, sentiment: 85, keyTopics: ["Shopify Sync", "Marketing Budget"], link: "#" },
+                    { date: "Sep 15, 2025", rating: 8, sentiment: 82, keyTopics: ["TIP Photos", "Sales Pipeline"], link: "#" },
+                    { date: "Sep 8, 2025", rating: 8, sentiment: 88, keyTopics: ["ULP Performance", "New Hires"], link: "#" },
+                ],
+                departments: {
+                    technology: {
+                        name: "Technology",
+                        head: "Asfand Yaar",
+                        members: ["Gocha Avsajanishvili", "Prince Ezra", "Akash", "Saeed Ahmed", "JC Vergara"],
+                        scorecard: [ { metric: "ULP Uptime", goal: "99.9%", value: "99.95%" }, { metric: "Avg. Page Load (zuma.ca)", goal: "< 1.5s", value: "1.2s" }, { metric: "Bugs Closed (Weekly)", goal: "15", value: "18" }, ],
+                        rocks: [ { title: "Department: Launch ULP v2 beta", owner: "Gocha A.", status: "On Track" }, { title: "Individual: Refactor TIP image upload module", owner: "Prince E.", status: "On Track" }, { title: "Individual: Automate QA regression tests", owner: "JC V.", status: "On Track" }, ],
+                        issues: [ { title: "Need to upgrade server for Odoo staging environment" }, { title: "API documentation for ULP is outdated" }, ]
+                    },
+                    marketing: {
+                        name: "Marketing",
+                        head: "Hamza Khan",
+                        members: ["UX Designer", "SEO Writer", "Ads Specialist"],
+                        scorecard: [ { metric: "Organic Traffic (zuma.ca)", goal: "10k/wk", value: "11.2k" }, { metric: "Cost Per Lead (CPL)", goal: "< $50", value: "$45.50" }, { metric: "Keyword Rankings (Top 3)", goal: "20", value: "18" }, ],
+                        rocks: [ { title: "Department: A/B test new landing pages for zuma.ca", owner: "Hamza K.", status: "On Track" }, { title: "Individual: Create 10 new SEO blog posts", owner: "SEO Writer", status: "Off Track" }, ],
+                         issues: [ { title: "Video ad creative for YouTube is pending approval" }, ]
+                    },
+                    operations: {
+                        name: "Operations",
+                        head: "Asfand Yaar (Interim)",
+                        members: ["Sales Team", "Repair Team", "Shipping Team"],
+                        scorecard: [ { metric: "Avg. Repair Time", goal: "< 5 days", value: "6.1 days" }, { metric: "Machines Shipped (Weekly)", goal: "10", value: "12" }, { metric: "Sales Qualified Leads", goal: "30", value: "35" }, ],
+                        rocks: [ { title: "Department: Source 3 new parts suppliers", owner: "Asfand Y.", status: "On Track" }, { title: "Individual: Document shipping process for oversized lifts", owner: "Shipping Lead", status: "On Track" }, ],
+                         issues: [ { title: "Shortage of hydraulic pumps" }, { title: "Need to hire two more mechanics" }, ]
+                    }
+                },
+                // L10 Meeting State
+                l10Data: {
+                    lastWeeksToDos: [
+                        { id: 1, task: "Review Q3 Marketing Graphics", assignee: "Hamza K.", dueDate: "Sep 24", completed: false },
+                        { id: 2, task: "Finalize server spec for ULP v2", assignee: "Gocha A.", dueDate: "Sep 25", completed: false },
+                    ],
+                    currentToDos: [],
+                    meetingIssues: [],
+                }
+            },
+
+            init() {
+                // Deep copy initial data to allow for resets in a real app
+                this.data.l10Data.meetingIssues = JSON.parse(JSON.stringify(this.data.issues));
+
+                this.router();
+                window.addEventListener('hashchange', this.router.bind(this));
+                
+                const menuButton = document.getElementById('menu-button');
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebar-overlay');
+                const menuIcon = document.getElementById('menu-button-icon');
+
+                const toggleSidebar = () => {
+                    const isOpen = !sidebar.classList.contains('-translate-x-full');
+                    if (isOpen) {
+                        sidebar.classList.add('-translate-x-full');
+                        overlay.classList.add('hidden');
+                        menuIcon.classList.remove('rotate-180');
+                        menuButton.classList.remove('left-64');
+                        menuButton.classList.add('left-0');
+                    } else {
+                        sidebar.classList.remove('-translate-x-full');
+                        overlay.classList.remove('hidden');
+                        menuIcon.classList.add('rotate-180');
+                        menuButton.classList.remove('left-0');
+                        menuButton.classList.add('left-64');
+                    }
+                };
+
+                menuButton.addEventListener('click', toggleSidebar);
+                overlay.addEventListener('click', toggleSidebar);
+            },
+
+            router() {
+                const [hash, param] = (window.location.hash || '#dashboard').split('/');
+                const pageTitle = document.getElementById('page-title');
+                
+                document.querySelector('.nav-link.active')?.classList.remove('active');
+                document.querySelector(`.nav-link[href="${hash}"]`)?.classList.add('active');
+
+                const sidebar = document.getElementById('sidebar');
+                if (window.innerWidth < 768) { // Is mobile
+                     const isOpen = !sidebar.classList.contains('-translate-x-full');
+                     if(isOpen) {
+                        document.getElementById('menu-button').click();
+                     }
+                }
+
+                switch (hash) {
+                    case '#vto': pageTitle.textContent = "Vision/Traction Organizer"; this.render('vto'); break;
+                    case '#departments':
+                        if (param) {
+                            const deptName = this.data.departments[param]?.name || 'Departments';
+                             pageTitle.textContent = `${deptName} Department`;
+                             this.render('departmentDetail', param);
+                        } else {
+                             pageTitle.textContent = "Departments";
+                             this.render('departments');
+                        }
+                        break;
+                    case '#people': pageTitle.textContent = "People"; this.render('people'); break;
+                    case '#data': pageTitle.textContent = "Company Scorecard"; this.render('data'); break;
+                    case '#issues': pageTitle.textContent = "Company Issues"; this.render('issues'); break;
+                    case '#rocks': pageTitle.textContent = "Company Rocks"; this.render('rocks'); break;
+                    case '#l10': pageTitle.textContent = "Level 10 Meeting"; this.render('l10'); break;
+                    default: pageTitle.textContent = "Dashboard"; this.render('dashboard');
+                }
+            },
+            
+            render(page, param) {
+                const mainApp = document.getElementById('main-app');
+                mainApp.innerHTML = this.pages[page](param);
+                if(page === 'dashboard' || page === 'data') {
+                    setTimeout(() => this.renderCharts(), 0);
+                }
+                if(page === 'l10') this.initL10();
+            },
+
+            pages: {
+                dashboard() {
+                    const { scorecard, companyRocks, issues } = App.data;
+                    const onTrackRocks = companyRocks.filter(r => r.status === 'On Track' || r.status === 'Done').length;
+                    return `
+                        <div class="bg-indigo-700 text-white p-6 rounded-lg shadow-lg mb-6">
+                           <div class="flex items-start sm:items-center flex-col sm:flex-row">
+                               <i class="fas fa-robot text-3xl mr-4 mb-4 sm:mb-0"></i>
+                               <div>
+                                   <h3 class="font-bold text-xl">AI Analyst Summary</h3>
+                                   <p class="text-indigo-200">Good morning, Asfand. Here's a summary of Zuma's current status:</p>
+                                   <ul class="list-disc list-inside mt-2 text-sm space-y-1">
+                                       <li><strong class="font-semibold text-green-300">Key Wins:</strong> Shopify Sales and CSAT are above goal. The tech team is consistently closing more bugs than targeted.</li>
+                                       <li><strong class="font-semibold text-yellow-300">Risks to Watch:</strong> The "Streamline Shopify-Odoo Order Sync" rock is off track. ULP listings are slightly below target, and the Operations team's average repair time is high.</li>
+                                       <li><strong class="font-semibold text-blue-300">Suggested L10 Focus:</strong> Prioritize discussing the Odoo sync issue and the operations repair time to get them back on track.</li>
+                                   </ul>
+                               </div>
+                           </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div class="bg-white p-6 rounded-lg shadow"><h3 class="text-gray-500 text-sm font-medium">Shopify Sales (Weekly)</h3><p class="text-3xl font-bold text-gray-800 mt-2">$${scorecard[0].value.toLocaleString()}</p><p class="text-green-500 text-sm mt-1">+10% vs Goal</p></div>
+                            <div class="bg-white p-6 rounded-lg shadow"><h3 class="text-gray-500 text-sm font-medium">Rocks on Track</h3><p class="text-3xl font-bold text-gray-800 mt-2">${onTrackRocks} / ${companyRocks.length}</p><p class="text-gray-500 text-sm mt-1">${Math.round((onTrackRocks/companyRocks.length)*100)}% Completion</p></div>
+                            <div class="bg-white p-6 rounded-lg shadow"><h3 class="text-gray-500 text-sm font-medium">Open Issues</h3><p class="text-3xl font-bold text-gray-800 mt-2">${issues.length}</p><p class="text-gray-500 text-sm mt-1">${issues.filter(i=>i.priority===1).length} High Priority</p></div>
+                            <div class="bg-white p-6 rounded-lg shadow"><h3 class="text-gray-500 text-sm font-medium">CSAT</h3><p class="text-3xl font-bold text-gray-800 mt-2">${scorecard[4].value}</p><p class="text-green-500 text-sm mt-1">+1% vs Goal</p></div>
+                        </div>
+                        <div class="mt-6 bg-white p-6 rounded-lg shadow"><h3 class="font-semibold text-gray-800">Sales Trend</h3><canvas id="salesChart"></canvas></div>`;
+                },
+                vto() {
+                    return `<div class="bg-white p-6 sm:p-8 rounded-lg shadow"><div class="text-center mb-8"><h2 class="text-3xl font-bold text-gray-800">Vision/Traction Organizer&trade;</h2><p class="text-gray-500">for ${App.data.companyName}</p></div><div class="space-y-6"><div><h3 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-3">Core Values</h3><div class="flex flex-wrap gap-3">${App.data.vto.coreValues.map(value => `<span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">${value}</span>`).join('')}</div></div><div><h3 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-3">Core Focus&trade;</h3><p class="text-gray-600"><strong class="font-medium text-gray-800">Purpose/Cause/Passion:</strong> ${App.data.vto.coreFocus.purpose}</p><p class="text-gray-600"><strong class="font-medium text-gray-800">Our Niche:</strong> ${App.data.vto.coreFocus.niche}</p></div><div><h3 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-3">10-Year Target&trade;</h3><p class="text-gray-600">${App.data.vto.tenYearTarget}</p></div><div><h3 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-3">Marketing Strategy&trade;</h3><p class="text-gray-600"><strong class="font-medium text-gray-800">Target Market:</strong> ${App.data.vto.marketingStrategy.targetMarket}</p><p class="text-gray-600 mt-2"><strong class="font-medium text-gray-800">Three Uniques&trade;:</strong></p><ul class="list-disc list-inside ml-4 text-gray-600">${App.data.vto.marketingStrategy.threeUniques.map(u => `<li>${u}</li>`).join('')}</ul><p class="text-gray-600 mt-2"><strong class="font-medium text-gray-800">Proven Process&trade;:</strong> ${App.data.vto.marketingStrategy.provenProcess}</p><p class="text-gray-600 mt-2"><strong class="font-medium text-gray-800">Guarantee&trade;:</strong> ${App.data.vto.marketingStrategy.guarantee}</p></div><div><h3 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-3">3-Year Picture&trade;</h3><p class="text-gray-600">${App.data.vto.threeYearPicture}</p></div><div><h3 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-3">1-Year Plan&trade;</h3><ul class="list-disc list-inside text-gray-600 space-y-1">${App.data.vto.oneYearPlan.map(plan => `<li>${plan}</li>`).join('')}</ul></div></div></div>`;
+                },
+                people() {
+                    return `<div class="bg-white p-6 sm:p-8 rounded-lg shadow"><h2 class="text-2xl font-bold text-gray-800 mb-6">Accountability Chart</h2><div class="overflow-x-auto"><div class="flex flex-col items-center"><div class="accountability-chart-node w-64"><p class="font-bold text-lg">Visionary</p><p class="text-gray-600">Asfand Yaar</p></div><div class="accountability-chart-line"></div><div class="accountability-chart-node w-64"><p class="font-bold text-lg">Integrator</p><p class="text-gray-600">Asfand Yaar</p></div><div class="accountability-chart-line"></div><div class="w-full border-t-2 border-gray-300 my-4"></div><div class="accountability-chart-branch w-full flex-wrap"><div class="flex flex-col items-center m-2"><div class="accountability-chart-node w-48"><p class="font-bold">Operations</p><p class="text-gray-600">Asfand Yaar</p></div><div class="accountability-chart-line"></div><p class="text-sm text-gray-500 mt-2">Sales, Repair, Shipping</p></div><div class="flex flex-col items-center m-2"><div class="accountability-chart-node w-48"><p class="font-bold">Marketing</p><p class="text-gray-600">Hamza Khan</p></div><div class="accountability-chart-line"></div><p class="text-sm text-gray-500 mt-2">SEO, Ads, UX, Writers</p></div><div class="flex flex-col items-center m-2"><div class="accountability-chart-node w-48"><p class="font-bold">Technology</p><p class="text-gray-600">Asfand Yaar</p></div><div class="accountability-chart-line"></div><div class="accountability-chart-node w-48 mt-4"><p class="font-bold">Tech Lead</p><p class="text-gray-600">Gocha A.</p></div><div class="accountability-chart-line"></div><div class="flex space-x-2 flex-wrap justify-center mt-2"><div class="text-xs p-2 bg-gray-100 rounded m-1">P. Ezra (Sr)</div><div class="text-xs p-2 bg-gray-100 rounded m-1">Akash</div><div class="text-xs p-2 bg-gray-100 rounded m-1">Saeed A.</div><div class="text-xs p-2 bg-gray-100 rounded m-1">JC V. (QA)</div></div></div><div class="flex flex-col items-center m-2"><div class="accountability-chart-node w-48"><p class="font-bold">Finance</p><p class="text-gray-600">[Open Seat]</p></div><div class="accountability-chart-line"></div><p class="text-sm text-gray-500 mt-2">Accounting, Invoicing</p></div></div></div></div></div>`;
+                },
+                data() {
+                    return `<div class="bg-white p-6 rounded-lg shadow"><h2 class="text-2xl font-bold text-gray-800 mb-4">Company Scorecard</h2><div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="bg-gray-50 border-b"><th class="p-4 font-semibold">Metric</th><th class="p-4 font-semibold">Goal</th><th class="p-4 font-semibold">Actual</th><th class="p-4 font-semibold">Trend (4 weeks)</th></tr></thead><tbody>${App.data.scorecard.map(item => { const goal = parseFloat(String(item.goal).replace(/[^\d.-]/g, '')); const value = parseFloat(String(item.value).replace(/[^\d.-]/g, '')); const isGood = item.metric.includes('Time') ? value <= goal : value >= goal; return `<tr class="border-b hover:bg-gray-50"><td class="p-4 font-medium">${item.metric}</td><td class="p-4 text-gray-600">${item.goal}</td><td class="p-4 font-bold ${isGood ? 'text-green-600' : 'text-red-600'}">${item.value}</td><td class="p-4"><div class="w-32 h-16"><canvas class="scorecard-chart" data-trend='${JSON.stringify(item.trend)}' data-good="${isGood}"></canvas></div></td></tr>` }).join('')}</tbody></table></div></div>`;
+                },
+                issues() {
+                    return `<div class="bg-white p-6 rounded-lg shadow"><div class="flex flex-col sm:flex-row justify-between sm:items-center mb-4"><h2 class="text-2xl font-bold text-gray-800 mb-4 sm:mb-0">Company Issues List</h2><button class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 self-start sm:self-center">Add Issue</button></div><ul class="space-y-3">${App.data.issues.sort((a,b) => a.priority - b.priority).map(issue => `<li class="p-4 border rounded-lg flex flex-col sm:flex-row justify-between sm:items-center hover:bg-gray-50"><div class="mb-2 sm:mb-0"><p class="font-semibold text-gray-800">${issue.title}</p><p class="text-sm text-gray-500">Priority: ${issue.priority} &bull; Age: ${issue.age} days</p></div><div class="flex items-center space-x-2 self-end sm:self-center"><button class="text-gray-400 hover:text-indigo-600 p-2"><i class="fas fa-edit"></i></button><button class="text-gray-400 hover:text-green-600 p-2"><i class="fas fa-check"></i> Solve</button></div></li>`).join('')}</ul></div>`;
+                },
+                rocks() {
+                    return `<div class="flex flex-col sm:flex-row justify-between sm:items-center mb-6"><h2 class="text-2xl font-bold text-gray-800 mb-4 sm:mb-0">Company Rocks - Q3</h2><button class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 self-start sm:self-center">Add Rock</button></div><div class="grid grid-cols-1 lg:grid-cols-3 gap-6">${["On Track", "Off Track", "Done"].map(status => `<div class="bg-gray-100 rounded-lg p-4"><h3 class="font-bold text-lg mb-4 text-center">${status}</h3><div class="space-y-4">${App.data.companyRocks.filter(rock => rock.status === status).map(rock => `<div class="bg-white p-4 rounded-lg shadow kanban-card"><p class="font-semibold text-gray-800">${rock.title}</p><div class="flex justify-between items-center mt-3"><span class="text-sm text-gray-500">${rock.owner}</span><span class="flex-shrink-0 px-2 py-1 text-xs font-semibold rounded-full ${rock.team === 'Dev' ? 'bg-purple-100 text-purple-800' : rock.team === 'Marketing' ? 'bg-pink-100 text-pink-800' : 'bg-yellow-100 text-yellow-800'}">${rock.team}</span></div></div>`).join('') || `<div class="text-center text-gray-500 p-4">No rocks in this category.</div>`}</div></div>`).join('')}</div>`;
+                },
+                departments() {
+                    return `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${Object.keys(App.data.departments).map(key => { const dept = App.data.departments[key]; return `<a href="#departments/${key}" class="block bg-white p-6 rounded-lg shadow hover:shadow-xl transition-shadow"><h3 class="text-xl font-bold text-indigo-600">${dept.name}</h3><p class="text-gray-600 mt-1">Headed by: ${dept.head}</p><p class="text-sm text-gray-500 mt-4">${dept.members.length} Team Members</p><p class="text-sm text-gray-500">${dept.rocks.length} Rocks</p></a>` }).join('')}</div>`;
+                },
+                departmentDetail(deptKey) {
+                    const dept = App.data.departments[deptKey];
+                    if (!dept) return `<p>Department not found.</p>`;
+                    return `<div><a href="#departments" class="text-indigo-600 hover:underline mb-4 inline-block">&larr; Back to all departments</a></div><div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="lg:col-span-2 space-y-6"><div class="bg-white p-6 rounded-lg shadow"><h3 class="text-xl font-bold text-gray-800 mb-4">Rocks</h3><ul class="space-y-3">${dept.rocks.map(rock => `<li class="p-3 border rounded-lg flex justify-between items-center ${rock.status === 'Off Track' ? 'bg-red-50 border-red-200' : 'bg-gray-50'}"><div><p class="font-semibold text-gray-800">${rock.title}</p><p class="text-sm text-gray-500">${rock.owner}</p></div><span class="flex-shrink-0 px-2 py-1 text-xs font-semibold rounded-full ${ rock.status === 'On Track' ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800'}">${rock.status}</span></li>`).join('')}</ul></div><div class="bg-white p-6 rounded-lg shadow"><h3 class="text-xl font-bold text-gray-800 mb-4">Scorecard</h3><ul class="space-y-2">${dept.scorecard.map(item => `<li class="flex justify-between items-center p-2 rounded ${item.value.includes('%') && parseFloat(item.value) >= parseFloat(item.goal) ? 'bg-green-50' : item.value > item.goal ? 'bg-green-50' : 'bg-gray-50'}"><span class="text-gray-700">${item.metric}</span><div><span class="font-bold text-gray-800">${item.value}</span><span class="text-sm text-gray-500 ml-2">(Goal: ${item.goal})</span></div></li>`).join('')}</ul></div></div><div class="space-y-6"><div class="bg-white p-6 rounded-lg shadow"><h3 class="text-xl font-bold text-gray-800 mb-4">Team</h3><ul class="space-y-3"><li class="font-bold text-gray-700">${dept.head} (Head)</li>${dept.members.map(member => `<li class="text-gray-600">${member}</li>`).join('')}</ul></div><div class="bg-white p-6 rounded-lg shadow"><h3 class="text-xl font-bold text-gray-800 mb-4">Issues</h3><ul class="space-y-2 list-disc list-inside">${dept.issues.map(issue => `<li class="text-gray-600">${issue.title}</li>`).join('')}</ul></div></div></div>`;
+                },
+                l10() {
+                    return `
+                        <div class="flex border-b mb-4">
+                            <button id="l10-tab-live" class="px-4 py-2 font-semibold border-b-2 border-indigo-600 text-indigo-600">Live Meeting</button>
+                            <button id="l10-tab-history" class="px-4 py-2 font-semibold text-gray-500">History & AI Insights</button>
+                        </div>
+                        <div id="l10-content">
+                           <!-- L10 content will be injected here -->
+                        </div>
+                    `;
+                }
+            },
+            
+            renderCharts() { 
+                const salesCanvas = document.getElementById('salesChart');
+                if (salesCanvas) {
+                    new Chart(salesCanvas, {
+                        type: 'line',
+                        data: {
+                            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                            datasets: [{
+                                label: 'Weekly Sales ($)',
+                                data: App.data.scorecard[0].trend.map(v => v * 1000),
+                                borderColor: '#4f46e5',
+                                backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: { scales: { y: { beginAtZero: false } } }
+                    });
+                }
+                
+                document.querySelectorAll('.scorecard-chart').forEach(canvas => {
+                     const trendData = JSON.parse(canvas.dataset.trend);
+                     const isGood = canvas.dataset.good === 'true';
+                     new Chart(canvas, { type: 'line', data: { labels: ['', '', '', ''], datasets: [{ data: trendData, borderColor: isGood ? '#10B981' : '#EF4444', borderWidth: 2, pointRadius: 0, tension: 0.4, }] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { display: false }, y: { display: false } }, plugins: { legend: { display: false } }, layout: { padding: { top: 5, bottom: 5, left: 5, right: 5 } } } });
+                });
+            },
+
+            initL10() {
+                const liveTab = document.getElementById('l10-tab-live');
+                const historyTab = document.getElementById('l10-tab-history');
+                const contentContainer = document.getElementById('l10-content');
+                let timerInterval;
+                let currentStep = 0;
+
+                const addIssue = (title, priority = 3) => {
+                    if (!title.trim()) return;
+                    const newIssue = { id: Date.now(), title: title.trim(), priority: priority, age: 0 };
+                    this.data.l10Data.meetingIssues.push(newIssue);
+                    this.data.l10Data.meetingIssues.sort((a,b) => a.priority - b.priority);
+                    renderL10Step();
+                };
+
+                const addToDo = (task, assignee) => {
+                     if (!task || !task.trim() || !assignee || !assignee.trim()) return;
+                     const newTodo = { id: Date.now(), task: task.trim(), assignee: assignee.trim(), dueDate: "Next Week", completed: false };
+                     this.data.l10Data.currentToDos.push(newTodo);
+                     renderL10Step();
+                };
+                
+                const L10_CONTENT = {
+                    segue: () => `<h4 class="font-bold mb-2">Good News</h4><p class="text-gray-600 mb-4">Each team member shares one piece of personal and one piece of professional good news from the past week.</p><textarea class="w-full p-2 border rounded" rows="4" placeholder="Capture notes here..."></textarea>`,
+                    scorecard: () => `
+                        <h4 class="font-bold mb-2">Scorecard Review</h4>
+                        <p class="text-gray-600 mb-4">Review the key metrics. Click value to edit. Add any off-track items to the Issues list.</p>
+                        <ul class="space-y-2">
+                            ${this.data.scorecard.map((item, index) => {
+                                const goal = parseFloat(String(item.goal).replace(/[^\d.-]/g, ''));
+                                const value = parseFloat(String(item.value).replace(/[^\d.-]/g, ''));
+                                const isGood = item.metric.includes('Time') ? value <= goal : value >= goal;
+                                return `<li class="flex flex-col sm:flex-row justify-between sm:items-center p-2 rounded ${isGood ? 'bg-green-50' : 'bg-red-50'}"><span class="font-medium mb-2 sm:mb-0">${item.metric}</span><div class="flex items-center space-x-2 sm:space-x-4"><span class="text-sm text-gray-500">Goal: ${item.goal}</span><input type="text" value="${item.value}" class="w-24 p-1 border rounded text-right" data-metric-index="${index}">${!isGood ? `<button class="add-to-ids-btn text-xs bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600" data-issue-title="${item.metric} is off track">Add to IDS</button>` : `<div class="w-24 hidden sm:block"></div>`}</div></li>`;
+                            }).join('')}
+                        </ul>`,
+                    rockReview: () => `
+                        <h4 class="font-bold mb-2">Rock Review</h4>
+                        <p class="text-gray-600 mb-4">Each member gives a quick update on their Rocks: "On Track" or "Off Track".</p>
+                        <ul class="space-y-2">${this.data.companyRocks.map(rock => `<li class="flex justify-between items-center p-2 rounded ${rock.status === 'Off Track' ? 'bg-red-50' : 'bg-gray-50'}"><div><p class="font-semibold">${rock.title}</p><p class="text-sm text-gray-500">${rock.owner}</p></div><div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in"><input type="checkbox" name="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" data-rock-id="${rock.id}" ${rock.status === 'On Track' ? 'checked' : ''}><label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label></div></li>`).join('')}</ul>`,
+                    headlines: () => `<div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div><h4 class="font-bold mb-2">Customer Headlines</h4><textarea id="customer-headline" class="w-full p-2 border rounded" rows="3" placeholder="Good or bad news about customers..."></textarea><button class="add-headline-btn mt-2 text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600" data-source="customer-headline">Add to IDS</button></div><div><h4 class="font-bold mb-2">Employee Headlines</h4><textarea id="employee-headline" class="w-full p-2 border rounded" rows="3" placeholder="Good or bad news about employees..."></textarea><button class="add-headline-btn mt-2 text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600" data-source="employee-headline">Add to IDS</button></div></div>`,
+                    toDoList: () => `
+                        <h4 class="font-bold mb-2">To-Do List</h4>
+                        <p class="text-gray-600 mb-4">Review the to-do list from last week. Goal is 90% completion.</p>
+                        <div id="last-week-todos"><h5 class="font-semibold text-sm mb-2 text-gray-500">From Last Week</h5>${this.data.l10Data.lastWeeksToDos.filter(t => !t.completed).map(todo => `<div class="flex items-center justify-between p-2 bg-gray-50 rounded mb-2"><div class="flex items-center"><input type="checkbox" class="h-4 w-4 mr-3" data-todo-id="${todo.id}"><div><p class="text-gray-800">${todo.task}</p><p class="text-xs text-gray-500">${todo.assignee} - Due: ${todo.dueDate}</p></div></div></div>`).join('') || '<p class="text-gray-400 text-sm">All done!</p>'}</div>
+                         <div id="current-todos" class="mt-4"><h5 class="font-semibold text-sm mb-2 text-gray-500">New To-Dos (This Meeting)</h5>${this.data.l10Data.currentToDos.map(todo => `<div class="flex items-center justify-between p-2 bg-yellow-50 rounded mb-2"><div><p class="text-gray-800">${todo.task}</p><p class="text-xs text-gray-500">${todo.assignee}</p></div><button class="delete-todo-btn text-red-500 hover:text-red-700 text-xl font-bold p-1" data-todo-id="${todo.id}">&times;</button></div>`).join('') || '<p class="text-gray-400 text-sm">None yet.</p>'}</div>`,
+                    ids: () => `
+                        <h4 class="font-bold mb-2">IDS™ (Identify, Discuss, Solve)</h4><p class="text-gray-600 mb-4">Tackle the prioritized issues list.</p>
+                        <div id="issues-list" class="space-y-2 mb-4">${this.data.l10Data.meetingIssues.map(issue => `<div class="p-3 border rounded-lg flex flex-col sm:flex-row justify-between sm:items-center"><div class="mb-2 sm:mb-0"><p class="font-semibold text-gray-800">${issue.priority}. ${issue.title}</p></div><button class="add-todo-from-ids-btn text-xs bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 self-end sm:self-center" data-issue-title="${issue.title}">Add a To-Do</button></div>`).join('')}</div>
+                        <div class="flex space-x-2"><input id="manual-issue-input" type="text" class="flex-grow p-2 border rounded" placeholder="Manually add a new issue..."><button id="add-manual-issue-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700">Add</button></div>`,
+                    conclude: () => `<h4 class="font-bold mb-2">Conclude</h4><p class="text-gray-600 mb-4">Recap new To-Dos, decide on any cascading messages, and rate the meeting.</p><p class="font-semibold">New To-Dos Created: ${this.data.l10Data.currentToDos.length}</p><p class="mt-2 font-semibold">Cascading Message:</p><textarea class="w-full p-2 border rounded mt-1" rows="3" placeholder="E.g., Tech team is aware of and actively fixing the Odoo-Shopify sync delay."></textarea><p class="mt-4 text-center text-2xl font-bold">Meeting Rating: ___ / 10</p>`,
+                };
+
+                const steps = [
+                    { title: "Welcome", duration: 0, content: () => `<p class="text-center text-gray-600">This is a simulation of the weekly 90-minute Level 10 Meeting.</p><button id="start-l10" class="mt-4 w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700">Start Meeting</button>` },
+                    { title: "Segue", duration: 300, content: L10_CONTENT.segue },
+                    { title: "Scorecard", duration: 300, content: L10_CONTENT.scorecard },
+                    { title: "Rock Review", duration: 300, content: L10_CONTENT.rockReview },
+                    { title: "Headlines", duration: 300, content: L10_CONTENT.headlines },
+                    { title: "To-Do List", duration: 300, content: L10_CONTENT.toDoList },
+                    { title: "IDS™", duration: 3600, content: L10_CONTENT.ids },
+                    { title: "Conclude", duration: 300, content: L10_CONTENT.conclude },
+                ];
+                
+                const startTimer = (duration) => {
+                    if (timerInterval) clearInterval(timerInterval);
+                    const timerEl = document.getElementById('timer');
+                    if (!timerEl) return;
+                    if(duration === 0) { timerEl.textContent = '00:00'; return; }
+                    let time = duration;
+                    timerInterval = setInterval(() => {
+                        let minutes = Math.floor(time / 60); let seconds = time % 60;
+                        timerEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                        if (--time < 0) clearInterval(timerInterval);
+                    }, 1000);
+                };
+
+                const renderL10Step = () => {
+                    const step = steps[currentStep];
+                    contentContainer.innerHTML = `
+                        <div id="l10-container-live" class="bg-white p-4 sm:p-8 rounded-lg shadow-inner">
+                            <div class="flex justify-between items-center mb-4"><h3 class="text-xl sm:text-2xl font-bold text-gray-800">${step.title}</h3><p id="timer" class="text-xl sm:text-2xl font-bold text-indigo-600 l10-timer">00:00</p></div>
+                            <div class="prose max-w-none">${step.content()}</div>
+                            <div class="flex justify-between mt-6">
+                                <button id="prev-step" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-400 disabled:opacity-50" ${currentStep === 0 ? 'disabled' : ''}>Previous</button>
+                                <button id="next-step" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700">${currentStep === steps.length - 1 ? 'Finish Meeting' : 'Next'}</button>
+                            </div>
+                        </div>`;
+                    startTimer(step.duration);
+                };
+                
+                const showLiveMeeting = () => {
+                    liveTab.classList.add('border-indigo-600', 'text-indigo-600'); liveTab.classList.remove('text-gray-500');
+                    historyTab.classList.remove('border-indigo-600', 'text-indigo-600'); historyTab.classList.add('text-gray-500');
+                    renderL10Step();
+                };
+
+                const showHistory = () => {
+                    historyTab.classList.add('border-indigo-600', 'text-indigo-600'); historyTab.classList.remove('text-gray-500');
+                    liveTab.classList.remove('border-indigo-600', 'text-indigo-600'); liveTab.classList.add('text-gray-500');
+                    const { meetingHistory } = App.data;
+                    contentContainer.innerHTML = `<div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white p-6 rounded-lg shadow-inner"><h3 class="text-xl font-bold text-gray-800 mb-4">Meeting History</h3><ul class="space-y-3">${meetingHistory.map(meeting => `<li class="p-3 border rounded-lg flex justify-between items-center"><div><p class="font-semibold">L10 Meeting - ${meeting.date}</p><p class="text-sm text-gray-500">Rating: ${meeting.rating}/10 &bull; Key Topics: ${meeting.keyTopics.join(', ')}</p></div><a href="${meeting.link}" class="text-indigo-600 hover:underline text-sm flex-shrink-0 ml-2">View Record</a></li>`).join('')}</ul></div><div class="bg-white p-6 rounded-lg shadow-inner"><h3 class="text-xl font-bold text-gray-800 mb-4">AI Sentiment Analysis</h3><p class="text-sm text-gray-600 mb-4">Tracks the overall sentiment of meeting discussions over time, based on transcript analysis.</p><canvas id="sentimentChart"></canvas></div></div>`;
+                    new Chart(document.getElementById('sentimentChart'), { type: 'line', data: { labels: meetingHistory.map(m => m.date).reverse(), datasets: [{ label: 'Meeting Sentiment Score', data: meetingHistory.map(m => m.sentiment).reverse(), borderColor: '#4f46e5', backgroundColor: 'rgba(79, 70, 229, 0.1)', fill: true, tension: 0.4 }] }, options: { scales: { y: { beginAtZero: false, max: 100 } } } });
+                };
+
+                liveTab.addEventListener('click', () => { currentStep = 0; showLiveMeeting(); });
+                historyTab.addEventListener('click', showHistory);
+                
+                contentContainer.addEventListener('click', (e) => {
+                    if (e.target.id === 'start-l10' || e.target.id === 'next-step') { if (currentStep < steps.length - 1) { currentStep++; renderL10Step(); } else { alert('Meeting Finished!'); } }
+                    if (e.target.id === 'prev-step') { if (currentStep > 0) { currentStep--; renderL10Step(); } }
+                    if (e.target.classList.contains('add-to-ids-btn')) { addIssue(e.target.dataset.issueTitle, 1); }
+                    if (e.target.classList.contains('add-headline-btn')) { const sourceId = e.target.dataset.source; const headlineText = document.getElementById(sourceId).value; addIssue(headlineText); document.getElementById(sourceId).value = ''; }
+                    if (e.target.id === 'add-manual-issue-btn') { const input = document.getElementById('manual-issue-input'); addIssue(input.value); input.value = ''; }
+                    if (e.target.classList.contains('add-todo-from-ids-btn')) { const task = prompt("Enter To-Do task:", e.target.dataset.issueTitle); const assignee = prompt("Assign to:", "Asfand Y."); addToDo(task, assignee); }
+                    if (e.target.classList.contains('delete-todo-btn')) { const todoId = parseInt(e.target.dataset.todoId); this.data.l10Data.currentToDos = this.data.l10Data.currentToDos.filter(t => t.id !== todoId); renderL10Step(); }
+                });
+
+                contentContainer.addEventListener('change', (e) => {
+                    if (e.target.classList.contains('toggle-checkbox')) { const rockId = parseInt(e.target.dataset.rockId); const rock = this.data.companyRocks.find(r => r.id === rockId); if (rock) { rock.status = e.target.checked ? "On Track" : "Off Track"; renderL10Step(); } }
+                    if(e.target.matches('input[type="checkbox"][data-todo-id]')) { const todoId = parseInt(e.target.dataset.todoId); const todo = this.data.l10Data.lastWeeksToDos.find(t => t.id === todoId); if(todo) { todo.completed = e.target.checked; e.target.closest('div.flex').style.transition = 'opacity 0.5s'; e.target.closest('div.flex').style.opacity = '0'; setTimeout(() => renderL10Step(), 500); } }
+                });
+
+                contentContainer.addEventListener('input', (e) => {
+                    if(e.target.matches('input[data-metric-index]')) { const index = parseInt(e.target.dataset.metricIndex); const metric = this.data.scorecard[index]; if(metric) { metric.value = e.target.value; } }
+                });
+
+                showLiveMeeting();
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => App.init());
+
+    </script>
+</body>
+</html>
