@@ -213,17 +213,17 @@
             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"></path>
             </svg>
-            <span class="hidden lg:inline">AI Assistant</span>
+            <span class="hidden lg:inline">Zuma Assistant</span>
             <div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
         </button>
     </div>
 
     <!-- AI Chat Modal -->
-    <div id="ai-chat-modal" class="hidden fixed bottom-24 right-6 w-96 h-[600px] bg-gray-800 rounded-lg shadow-2xl z-50 flex flex-col">
+    <div id="ai-chat-modal" class="hidden fixed bottom-24 right-6 w-[520px] h-[600px] bg-gray-800 rounded-lg shadow-2xl z-50 flex flex-col">
         <div class="p-4 border-b border-gray-700 flex justify-between items-center">
             <div class="flex items-center space-x-2">
                 <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <h3 class="font-bold text-white">EOS AI Assistant</h3>
+                <h3 class="font-bold text-white">Zuma Assistant</h3>
             </div>
             <button id="close-ai-chat" class="text-gray-400 hover:text-white">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -233,6 +233,50 @@
         </div>
 
         <div id="ai-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3">
+            <style>
+                #ai-chat-messages::-webkit-scrollbar {
+                    width: 6px;
+                }
+                #ai-chat-messages::-webkit-scrollbar-track {
+                    background: #1f2937;
+                    border-radius: 3px;
+                }
+                #ai-chat-messages::-webkit-scrollbar-thumb {
+                    background: #4b5563;
+                    border-radius: 3px;
+                }
+                #ai-chat-messages::-webkit-scrollbar-thumb:hover {
+                    background: #6b7280;
+                }
+                @keyframes slideUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(10px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                .chat-message {
+                    animation: slideUp 0.3s ease-out;
+                }
+                .ai-message-content p {
+                    margin-bottom: 0.75rem;
+                }
+                .ai-message-content ul {
+                    list-style: disc;
+                    margin-left: 1.25rem;
+                    margin-bottom: 0.75rem;
+                }
+                .ai-message-content li {
+                    margin-bottom: 0.25rem;
+                }
+                .ai-message-content strong {
+                    font-weight: 600;
+                    color: #e5e7eb;
+                }
+            </style>
             <div class="flex items-start space-x-2">
                 <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
                     <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -240,7 +284,7 @@
                     </svg>
                 </div>
                 <div class="flex-1 bg-gray-700 rounded-lg p-3">
-                    <p class="text-sm text-gray-300">Hello! I'm your EOS AI Assistant. I can help you analyze meetings, track rocks, and provide insights. How can I help you today?</p>
+                    <p class="text-sm text-gray-300">Hello Asfand! I'm your Zuma Assistant. I can help you analyze meetings, track rocks, and provide insights. How can I help you today?</p>
                 </div>
             </div>
         </div>
@@ -647,6 +691,69 @@
                                 memberIds: ["emp11", "emp12", "emp13"],
                                 rocks: 2,
                                 issues: 2
+                            },
+                            sales: {
+                                name: "Sales",
+                                head: "Michael Roberts",
+                                headId: "emp14",
+                                members: ["Emma Thompson", "Daniel Lee", "Sophie Anderson"],
+                                memberIds: ["emp15", "emp16", "emp17"],
+                                rocks: 3,
+                                issues: 2
+                            },
+                            finance: {
+                                name: "Finance",
+                                head: "Jennifer Wu",
+                                headId: "emp18",
+                                members: ["Robert Chang", "Alice Morgan"],
+                                memberIds: ["emp19", "emp20"],
+                                rocks: 1,
+                                issues: 0
+                            },
+                            hr: {
+                                name: "Human Resources",
+                                head: "Patricia Davis",
+                                headId: "emp21",
+                                members: ["Kevin Brown", "Nancy White"],
+                                memberIds: ["emp22", "emp23"],
+                                rocks: 2,
+                                issues: 1
+                            },
+                            product: {
+                                name: "Product",
+                                head: "Alex Turner",
+                                headId: "emp24",
+                                members: ["Chris Martinez", "Rachel Green", "Sam Taylor"],
+                                memberIds: ["emp25", "emp26", "emp27"],
+                                rocks: 4,
+                                issues: 3
+                            },
+                            customerSuccess: {
+                                name: "Customer Success",
+                                head: "Linda Jackson",
+                                headId: "emp28",
+                                members: ["Brian Wilson", "Diana Ross"],
+                                memberIds: ["emp29", "emp30"],
+                                rocks: 2,
+                                issues: 1
+                            },
+                            legal: {
+                                name: "Legal & Compliance",
+                                head: "David Miller",
+                                headId: "emp31",
+                                members: ["Jessica Brown"],
+                                memberIds: ["emp32"],
+                                rocks: 1,
+                                issues: 0
+                            },
+                            businessDev: {
+                                name: "Business Development",
+                                head: "Thomas Anderson",
+                                headId: "emp33",
+                                members: ["Michelle Lee", "Ryan Cooper"],
+                                memberIds: ["emp34", "emp35"],
+                                rocks: 3,
+                                issues: 2
                             }
                         }
                     };
@@ -736,44 +843,171 @@
                     document.getElementById('ai-chat-modal').classList.add('hidden');
                 });
 
-                document.getElementById('ai-send-btn')?.addEventListener('click', () => {
+                // AI Chat input enter key handler
+                document.getElementById('ai-chat-input')?.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        document.getElementById('ai-send-btn')?.click();
+                    }
+                });
+
+                // AI Quick action buttons
+                document.querySelectorAll('.ai-quick-action').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const action = btn.dataset.action;
+                        const input = document.getElementById('ai-chat-input');
+
+                        const queries = {
+                            'analyze-meeting': 'Analyze the last L10 meeting and provide insights',
+                            'off-track': 'Show me all off-track rocks and suggest actions',
+                            'weekly-report': 'Generate a weekly report summary'
+                        };
+
+                        if (input && queries[action]) {
+                            input.value = queries[action];
+                            document.getElementById('ai-send-btn')?.click();
+                        }
+                    });
+                });
+
+                document.getElementById('ai-send-btn')?.addEventListener('click', async () => {
                     const input = document.getElementById('ai-chat-input');
                     const messages = document.getElementById('ai-chat-messages');
                     if (input && input.value.trim() && messages) {
+                        const userQuery = input.value.trim();
+
                         // Add user message
                         const userMsg = document.createElement('div');
-                        userMsg.className = 'flex items-start space-x-2 justify-end';
+                        userMsg.className = 'flex items-start space-x-2 justify-end chat-message';
                         userMsg.innerHTML = `
                             <div class="bg-indigo-600 rounded-lg p-3 max-w-xs">
-                                <p class="text-sm text-white">${Security.escapeHtml(input.value)}</p>
+                                <p class="text-sm text-white">${Security.escapeHtml(userQuery)}</p>
                             </div>
                         `;
                         messages.appendChild(userMsg);
 
-                        // Simulate AI response
-                        setTimeout(() => {
+                        // Show typing indicator
+                        const typingDiv = document.createElement('div');
+                        typingDiv.className = 'flex items-start space-x-2';
+                        typingDiv.innerHTML = `
+                            <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-white animate-spin" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1 bg-gray-700 rounded-lg p-3">
+                                <p class="text-sm text-gray-400">Thinking...</p>
+                            </div>
+                        `;
+                        messages.appendChild(typingDiv);
+                        messages.scrollTop = messages.scrollHeight;
+
+                        try {
+                            // Call Gemini API
+                            const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=AIzaSyA8JC0eio8QxDLm4h-9cHNqyUFbJaAe7N0', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    contents: [{
+                                        parts: [{
+                                            text: `You are Zuma Assistant, an AI assistant for an EOS (Entrepreneurial Operating System) business management platform. The current user is Asfand.
+
+Context about the company:
+- Company: ${App.data.companyName}
+- Employees: ${App.data.employees.length}
+- Departments: ${Object.keys(App.data.departments).join(', ')}
+- Current rocks on track: ${App.data.companyRocks.filter(r => r.status === 'On Track').length}
+- Off-track rocks: ${App.data.companyRocks.filter(r => r.status === 'Off Track').length}
+- Open issues: ${App.data.issues.filter(i => i.status === 'Open').length}
+
+User question: ${userQuery}
+
+Respond in a helpful, professional manner. Format your response using proper HTML tags:
+- Use <p> for paragraphs with proper spacing
+- Use <ul> and <li> for lists
+- Use <strong> for emphasis
+- Use <br> for line breaks where needed
+- Avoid walls of text - break content into readable chunks
+- Start with a greeting using the user's name (Asfand)
+- Keep paragraphs short and scannable
+- IMPORTANT: Do not wrap response in code blocks or backticks
+
+Address the user as Asfand.`
+                                        }]
+                                    }]
+                                })
+                            });
+
+                            // Remove typing indicator
+                            messages.removeChild(typingDiv);
+
+                            if (response.ok) {
+                                const data = await response.json();
+                                const aiResponse = data.candidates[0].content.parts[0].text;
+
+                                // Add AI response
+                                const aiMsg = document.createElement('div');
+                                aiMsg.className = 'flex items-start space-x-2 chat-message';
+
+                                // Process response to ensure proper HTML formatting
+                                let formattedResponse = aiResponse;
+                                // Clean up any raw text formatting and code blocks
+                                formattedResponse = formattedResponse
+                                    .replace(/```html?\n?/g, '')
+                                    .replace(/```\n?/g, '')
+                                    .trim();
+
+                                // If response doesn't have HTML tags, wrap in paragraphs
+                                if (!formattedResponse.includes('<p>') && !formattedResponse.includes('<ul>')) {
+                                    formattedResponse = formattedResponse
+                                        .split('\n\n')
+                                        .filter(p => p.trim())
+                                        .map(p => `<p>${p.trim()}</p>`)
+                                        .join('');
+                                }
+                                aiMsg.innerHTML = `
+                                    <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1 bg-gray-700 rounded-lg p-3">
+                                        <div class="text-sm text-gray-300 ai-message-content">${formattedResponse}</div>
+                                    </div>
+                                `;
+                                messages.appendChild(aiMsg);
+                            } else {
+                                throw new Error('API request failed');
+                            }
+                        } catch (error) {
+                            // Remove typing indicator
+                            messages.removeChild(typingDiv);
+
+                            // Fallback to predefined responses
                             const aiMsg = document.createElement('div');
-                            aiMsg.className = 'flex items-start space-x-2';
-                            const responses = [
-                                "I've analyzed your L10 meetings. You have 3 off-track rocks that need immediate attention.",
-                                "Your team's productivity has increased 12% since last quarter based on scorecard metrics.",
-                                "I notice recurring issues with customer response times. Consider adding this to next week's IDS.",
-                                "Great progress on Q1 rocks! 78% are on track or completed."
+                            aiMsg.className = 'flex items-start space-x-2 chat-message';
+                            const fallbackResponses = [
+                                "<p>Hi Asfand! I've analyzed your recent data. <strong>3 rocks are off-track</strong> and need immediate attention. Would you like me to provide details?</p>",
+                                "<p>Hello Asfand! Your team's productivity has <strong>increased 12%</strong> since last quarter. The technology department is leading with all rocks on track.</p>",
+                                "<p>Asfand, I notice recurring issues with customer response times. Consider adding this to next week's IDS agenda for discussion.</p>",
+                                "<p>Great progress, Asfand! <strong>78% of Q1 rocks</strong> are on track or completed. Marketing and Sales teams are performing exceptionally well.</p>"
                             ];
                             aiMsg.innerHTML = `
                                 <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
                                     <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path>
+                                        <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 818 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path>
                                     </svg>
                                 </div>
                                 <div class="flex-1 bg-gray-700 rounded-lg p-3">
-                                    <p class="text-sm text-gray-300">${responses[Math.floor(Math.random() * responses.length)]}</p>
+                                    <div class="text-sm text-gray-300">${fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)]}</div>
                                 </div>
                             `;
                             messages.appendChild(aiMsg);
-                            messages.scrollTop = messages.scrollHeight;
-                        }, 1000);
+                        }
 
+                        messages.scrollTop = messages.scrollHeight;
                         input.value = '';
                     }
                 });
@@ -1229,6 +1463,72 @@
                         }
                     }
 
+                    // Add Issue button handler
+                    if (target.classList.contains('add-issue-btn')) {
+                        App.showAddIssueModal();
+                    }
+
+                    // Edit Issue handler
+                    if (target.classList.contains('edit-issue-btn')) {
+                        const issueId = parseInt(target.dataset.issueId);
+                        const issue = App.data.issues.find(i => i.id === issueId);
+                        if (issue) {
+                            UI.showModal({
+                                title: 'Edit Issue',
+                                contentHTML: `
+                                    <div class="space-y-4">
+                                        <div>
+                                            <label class="block text-sm text-gray-300 mb-1">Issue Title</label>
+                                            <input id="edit-issue-title" type="text" class="w-full p-2 bg-gray-800 border border-gray-700 rounded text-white" value="${Security.escapeHtml(issue.title)}">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm text-gray-300 mb-1">Description</label>
+                                            <textarea id="edit-issue-description" class="w-full p-2 bg-gray-800 border border-gray-700 rounded text-white" rows="3">${Security.escapeHtml(issue.description || '')}</textarea>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="block text-sm text-gray-300 mb-1">Priority</label>
+                                                <select id="edit-issue-priority" class="w-full p-2 bg-gray-800 border border-gray-700 rounded text-white">
+                                                    <option value="1" ${issue.priority === 1 ? 'selected' : ''}>1 - Critical</option>
+                                                    <option value="2" ${issue.priority === 2 ? 'selected' : ''}>2 - High</option>
+                                                    <option value="3" ${issue.priority === 3 ? 'selected' : ''}>3 - Normal</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm text-gray-300 mb-1">Department</label>
+                                                <select id="edit-issue-department" class="w-full p-2 bg-gray-800 border border-gray-700 rounded text-white">
+                                                    <option value="technology" ${issue.department === 'technology' ? 'selected' : ''}>Technology</option>
+                                                    <option value="marketing" ${issue.department === 'marketing' ? 'selected' : ''}>Marketing</option>
+                                                    <option value="operations" ${issue.department === 'operations' ? 'selected' : ''}>Operations</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `,
+                                onSubmit: (content) => {
+                                    issue.title = content.querySelector('#edit-issue-title').value.trim();
+                                    issue.description = content.querySelector('#edit-issue-description').value.trim();
+                                    issue.priority = parseInt(content.querySelector('#edit-issue-priority').value);
+                                    issue.department = content.querySelector('#edit-issue-department').value;
+
+                                    Persistence.save(App.data);
+                                    UI.hideModal();
+                                    App.showNotification('success', 'Issue updated successfully');
+                                    App.router();
+                                },
+                                submitText: 'Save Changes'
+                            });
+                        }
+                    }
+
+                    // Delete Issue handler
+                    if (target.classList.contains('delete-issue-btn')) {
+                        const issueId = parseInt(target.dataset.issueId);
+                        if (confirm('Are you sure you want to delete this issue?')) {
+                            App.deleteIssue(issueId);
+                        }
+                    }
+
                     // Add headlines to IDS from tables
                     if (target.classList.contains('customer-to-ids') || target.classList.contains('employee-to-ids')) {
                         const row = target.closest('tr');
@@ -1246,6 +1546,49 @@
                                 App.showNotification('success', 'Added to IDS list!');
                             }
                         }
+                    }
+
+                    // VTO Edit handlers
+                    if (target.classList.contains('vto-editable')) {
+                        target.addEventListener('blur', function() {
+                            const field = this.dataset.field;
+                            const index = this.dataset.index;
+                            const value = this.textContent.trim();
+
+                            if (field.includes('.')) {
+                                const [parent, child] = field.split('.');
+                                App.data.vto[parent][child] = value;
+                            } else if (index !== undefined) {
+                                App.data.vto[field][index] = value;
+                            } else {
+                                App.data.vto[field] = value;
+                            }
+
+                            Persistence.save(App.data);
+                            App.hasUnsavedChanges = true;
+                        }, { once: true });
+                    }
+
+                    // Remove VTO value
+                    if (target.classList.contains('remove-value')) {
+                        const field = target.dataset.field;
+                        const index = parseInt(target.dataset.index);
+
+                        if (field.includes('.')) {
+                            const [parent, child] = field.split('.');
+                            App.data.vto[parent][child].splice(index, 1);
+                        } else {
+                            App.data.vto[field].splice(index, 1);
+                        }
+
+                        Persistence.save(App.data);
+                        App.router();
+                    }
+
+                    // Save VTO
+                    if (target.id === 'save-vto-btn') {
+                        Persistence.save(App.data);
+                        App.showNotification('success', 'V/TO saved successfully!');
                     }
 
                     // View history
@@ -1299,6 +1642,20 @@
                         document.body.insertAdjacentHTML('beforeend', historyHTML);
                     }
                 });
+            },
+
+            addVtoValue(field) {
+                const value = prompt(`Enter new ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}:`);
+                if (value) {
+                    const fields = field.split('.');
+                    if (fields.length === 1) {
+                        App.data.vto[field].push(value);
+                    } else {
+                        App.data.vto[fields[0]][fields[1]].push(value);
+                    }
+                    Persistence.save(App.data);
+                    App.router();
+                }
             },
 
             showNotification(type, message) {
@@ -1624,14 +1981,95 @@
                     `;
                 },
                 vto() {
-                    return `<div class="bg-gray-800 border border-gray-700 p-6 sm:p-8 rounded-lg shadow"><div class="text-center mb-8"><h2 class="text-3xl font-bold text-white">Vision/Traction Organizer&trade;</h2><p class="text-gray-400">for ${App.data.companyName}</p></div><div class="space-y-8">${Object.entries({
-                        "Core Values": `<div class="flex flex-wrap gap-3">${App.data.vto.coreValues.map(v => `<span class="bg-indigo-500/20 text-indigo-300 px-3 py-1 rounded-full text-sm font-medium">${v}</span>`).join('')}</div>`,
-                        "Core Focus&trade;": `<p><strong class="font-medium text-gray-300">Purpose/Cause/Passion:</strong> ${App.data.vto.coreFocus.purpose}</p><p><strong class="font-medium text-gray-300">Our Niche:</strong> ${App.data.vto.coreFocus.niche}</p>`,
-                        "10-Year Target&trade;": `<p>${App.data.vto.tenYearTarget}</p>`,
-                        "Marketing Strategy&trade;": `<p><strong class="font-medium text-gray-300">Target Market:</strong> ${App.data.vto.marketingStrategy.targetMarket}</p><p class="mt-2"><strong class="font-medium text-gray-300">Three Uniques&trade;:</strong></p><ul class="list-disc list-inside ml-4">${App.data.vto.marketingStrategy.threeUniques.map(u => `<li>${u}</li>`).join('')}</ul>`,
-                        "3-Year Picture&trade;": `<p>${App.data.vto.threeYearPicture}</p>`,
-                        "1-Year Plan&trade;": `<ul class="list-disc list-inside space-y-1">${App.data.vto.oneYearPlan.map(p => `<li>${p}</li>`).join('')}</ul>`
-                    }).map(([title, content]) => `<div><h3 class="text-xl font-semibold text-indigo-400 border-b border-gray-700 pb-2 mb-3">${title}</h3><div class="text-gray-300">${content}</div></div>`).join('')}</div></div>`;
+                    const vto = App.data.vto;
+                    return `
+                        <div class="bg-gray-800 border border-gray-700 p-6 sm:p-8 rounded-lg shadow">
+                            <div class="text-center mb-8">
+                                <h2 class="text-3xl font-bold text-white">Vision/Traction Organizer™</h2>
+                                <p class="text-gray-400">for ${App.data.companyName}</p>
+                            </div>
+
+                            <div class="space-y-8">
+                                <!-- Core Values -->
+                                <div>
+                                    <h3 class="text-xl font-semibold text-indigo-400 border-b border-gray-700 pb-2 mb-3">Core Values</h3>
+                                    <div class="flex flex-wrap gap-3" id="core-values-container">
+                                        ${vto.coreValues.map((v, i) => `
+                                            <div class="bg-indigo-500/20 text-indigo-300 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2">
+                                                <span contenteditable="true" class="vto-editable outline-none" data-field="coreValues" data-index="${i}">${v}</span>
+                                                <button class="remove-value text-red-400 hover:text-red-300" data-field="coreValues" data-index="${i}">&times;</button>
+                                            </div>
+                                        `).join('')}
+                                        <button class="bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded-full text-sm" onclick="App.addVtoValue('coreValues')">+ Add</button>
+                                    </div>
+                                </div>
+
+                                <!-- Core Focus -->
+                                <div>
+                                    <h3 class="text-xl font-semibold text-indigo-400 border-b border-gray-700 pb-2 mb-3">Core Focus™</h3>
+                                    <div class="space-y-2">
+                                        <p>
+                                            <strong class="font-medium text-gray-300">Purpose/Cause/Passion:</strong>
+                                            <span contenteditable="true" class="vto-editable outline-none bg-gray-900 px-2 py-1 rounded ml-2" data-field="coreFocus.purpose">${vto.coreFocus.purpose}</span>
+                                        </p>
+                                        <p>
+                                            <strong class="font-medium text-gray-300">Our Niche:</strong>
+                                            <span contenteditable="true" class="vto-editable outline-none bg-gray-900 px-2 py-1 rounded ml-2" data-field="coreFocus.niche">${vto.coreFocus.niche}</span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- 10-Year Target -->
+                                <div>
+                                    <h3 class="text-xl font-semibold text-indigo-400 border-b border-gray-700 pb-2 mb-3">10-Year Target™</h3>
+                                    <p contenteditable="true" class="vto-editable outline-none bg-gray-900 px-3 py-2 rounded" data-field="tenYearTarget">${vto.tenYearTarget}</p>
+                                </div>
+
+                                <!-- Marketing Strategy -->
+                                <div>
+                                    <h3 class="text-xl font-semibold text-indigo-400 border-b border-gray-700 pb-2 mb-3">Marketing Strategy™</h3>
+                                    <p class="mb-3">
+                                        <strong class="font-medium text-gray-300">Target Market:</strong>
+                                        <span contenteditable="true" class="vto-editable outline-none bg-gray-900 px-2 py-1 rounded ml-2" data-field="marketingStrategy.targetMarket">${vto.marketingStrategy.targetMarket}</span>
+                                    </p>
+                                    <p class="font-medium text-gray-300 mb-2">Three Uniques™:</p>
+                                    <ul class="list-disc list-inside ml-4 space-y-1">
+                                        ${vto.marketingStrategy.threeUniques.map((u, i) => `
+                                            <li>
+                                                <span contenteditable="true" class="vto-editable outline-none bg-gray-900 px-2 py-1 rounded" data-field="marketingStrategy.threeUniques" data-index="${i}">${u}</span>
+                                                <button class="remove-value text-red-400 hover:text-red-300 ml-2" data-field="marketingStrategy.threeUniques" data-index="${i}">&times;</button>
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                    <button class="bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-sm mt-2" onclick="App.addVtoValue('marketingStrategy.threeUniques')">+ Add Unique</button>
+                                </div>
+
+                                <!-- 3-Year Picture -->
+                                <div>
+                                    <h3 class="text-xl font-semibold text-indigo-400 border-b border-gray-700 pb-2 mb-3">3-Year Picture™</h3>
+                                    <p contenteditable="true" class="vto-editable outline-none bg-gray-900 px-3 py-2 rounded" data-field="threeYearPicture">${vto.threeYearPicture}</p>
+                                </div>
+
+                                <!-- 1-Year Plan -->
+                                <div>
+                                    <h3 class="text-xl font-semibold text-indigo-400 border-b border-gray-700 pb-2 mb-3">1-Year Plan™</h3>
+                                    <ul class="list-disc list-inside space-y-1">
+                                        ${vto.oneYearPlan.map((p, i) => `
+                                            <li>
+                                                <span contenteditable="true" class="vto-editable outline-none bg-gray-900 px-2 py-1 rounded" data-field="oneYearPlan" data-index="${i}">${p}</span>
+                                                <button class="remove-value text-red-400 hover:text-red-300 ml-2" data-field="oneYearPlan" data-index="${i}">&times;</button>
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                    <button class="bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-sm mt-2" onclick="App.addVtoValue('oneYearPlan')">+ Add Goal</button>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 text-center">
+                                <button id="save-vto-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-lg font-semibold">Save V/TO Changes</button>
+                            </div>
+                        </div>
+                    `;
                 },
                  people() {
                     const { employees, departments, individualRocks } = App.data;
@@ -1687,8 +2125,8 @@
                                         const dept = departments[emp.department];
                                         return `
                                             <div class="bg-gray-900 border border-gray-700 rounded-lg p-4 relative group">
-                                                <button class="edit-employee-btn absolute top-2 right-2 text-gray-400 hover:text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity" data-employee-id="${emp.id}">
-                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
+                                                <button class="edit-employee-btn absolute top-2 right-2 bg-gray-700 hover:bg-indigo-600 text-gray-300 hover:text-white p-2 rounded-lg transition-colors" data-employee-id="${emp.id}">
+                                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
                                                 </button>
                                                 <div class="flex items-start justify-between mb-2">
                                                     <div>
@@ -1796,12 +2234,13 @@
                     }).join('')}</div>`;
 },
                 rocks() {
-                    const { companyRocks, departmentRocks, individualRocks } = App.data;
+                    const { companyRocks, departmentalRocks, individualRocks } = App.data;
+                    const departmentRocks = departmentalRocks || App.data.departmentRocks;
                     const statusColors = { "On Track": "border-blue-500", "Off Track": "border-red-500", "Done": "border-green-500" };
                     const statusBg = { "On Track": "bg-blue-500/20 text-blue-300", "Off Track": "bg-red-500/20 text-red-300", "Done": "bg-green-500/20 text-green-300" };
 
                     return `
-                        <div class="space-y-6">
+                        <div class="space-y-6 pb-24">
                             <!-- Company Rocks -->
                             <div>
                                 <div class="flex justify-between items-center mb-4">
@@ -1966,6 +2405,10 @@
                         </div>
                     `;
                 },
+                integrations() {
+                    return App.integrations();
+                },
+
                 l10() {
                     return `<div class="flex border-b border-gray-700 mb-4"><button id="l10-tab-live" class="px-4 py-2 font-semibold border-b-2 border-indigo-500 text-indigo-400">Live Meeting</button><button id="l10-tab-history" class="px-4 py-2 font-semibold text-gray-500 hover:text-gray-300">History & AI Insights</button></div><div id="l10-content"></div>`;
                 },
@@ -2695,7 +3138,7 @@
                     </div>
                 `;
             }
-        }
+        };
 
         document.addEventListener('DOMContentLoaded', () => App.init());
     </script>
