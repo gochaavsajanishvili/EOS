@@ -472,9 +472,76 @@
         };
 
         const AI = {
-            analyze(meetingHistory) {
-                if (!meetingHistory || meetingHistory.length === 0) return "No meeting data available for analysis.";
-                return "Analysis of recent meeting sentiment indicates a positive trend. Key recurring topics include Shopify performance and ULP development. The team consistently rates meetings highly, suggesting strong engagement. Continue monitoring 'Off Track' rocks as they are the primary drivers of negative sentiment dips.";
+            analyze(data) {
+                // Analyze scorecard performance
+                const scorecardAnalysis = [];
+                if (data.scorecard) {
+                    data.scorecard.forEach(item => {
+                        const goal = parseFloat(String(item.goal).replace(/[^0-9.-]/g, '')) || 0;
+                        const value = parseFloat(String(item.value).replace(/[^0-9.-]/g, '')) || 0;
+                        const isTimeMetric = item.metric.toLowerCase().includes('time');
+                        const onTarget = isTimeMetric ? value <= goal : value >= goal;
+
+                        if (onTarget && Math.abs((value - goal) / goal) > 0.1) {
+                            scorecardAnalysis.push({ metric: item.metric, status: 'exceeding' });
+                        } else if (!onTarget) {
+                            scorecardAnalysis.push({ metric: item.metric, status: 'below' });
+                        }
+                    });
+                }
+
+                // Analyze rocks
+                const companyRocks = data.companyRocks || [];
+                const deptRocks = Object.values(data.departmentalRocks || data.departmentRocks || {}).flat();
+                const allRocks = [...companyRocks, ...deptRocks];
+                const offTrackRocks = allRocks.filter(r => r.status === 'Off Track');
+                const onTrackRocks = allRocks.filter(r => r.status === 'On Track');
+
+                // Build analysis HTML
+                let html = '<p class="text-indigo-200 mb-3">Good morning, Asfand. Here\'s a summary of Zuma\'s current status:</p>';
+                html += '<ul class="list-disc list-inside mt-2 text-sm space-y-2">';
+
+                // Key Wins
+                const wins = [];
+                if (scorecardAnalysis.filter(s => s.status === 'exceeding').length > 0) {
+                    wins.push(scorecardAnalysis.filter(s => s.status === 'exceeding').map(s => s.metric).join(', ') + ' are above goal');
+                }
+                if (onTrackRocks.length > offTrackRocks.length) {
+                    wins.push(`${Math.round((onTrackRocks.length / allRocks.length) * 100)}% of rocks are on track`);
+                }
+                if (wins.length > 0) {
+                    html += `<li><strong class="font-semibold text-green-300">Key Wins:</strong> ${wins.join('. ')}.</li>`;
+                }
+
+                // Risks to Watch
+                const risks = [];
+                if (offTrackRocks.length > 0) {
+                    risks.push(`${offTrackRocks.length} rock${offTrackRocks.length > 1 ? 's are' : ' is'} off track${offTrackRocks[0] ? ' including "' + (offTrackRocks[0].title || offTrackRocks[0].name) + '"' : ''}`);
+                }
+                if (scorecardAnalysis.filter(s => s.status === 'below').length > 0) {
+                    const belowMetrics = scorecardAnalysis.filter(s => s.status === 'below').map(s => s.metric);
+                    risks.push(`${belowMetrics.slice(0, 2).join(' and ')} ${belowMetrics.length === 1 ? 'is' : 'are'} below target`);
+                }
+                if (risks.length > 0) {
+                    html += `<li><strong class="font-semibold text-yellow-300">Risks to Watch:</strong> ${risks.join('. ')}.</li>`;
+                }
+
+                // Suggested L10 Focus
+                const suggestions = [];
+                if (offTrackRocks.length > 0) {
+                    suggestions.push('prioritize discussing off-track rocks');
+                }
+                if (data.issues && data.issues.filter(i => i.priority === 1).length > 0) {
+                    suggestions.push('address critical priority issues');
+                }
+                if (suggestions.length > 0) {
+                    html += `<li><strong class="font-semibold text-blue-300">Suggested L10 Focus:</strong> ${suggestions.join(' and ')} to get back on track.</li>`;
+                } else {
+                    html += `<li><strong class="font-semibold text-blue-300">Suggested L10 Focus:</strong> Continue momentum on current initiatives and review quarterly rock progress.</li>`;
+                }
+
+                html += '</ul>';
+                return html;
             }
         };
 
@@ -1898,7 +1965,7 @@ Address the user as Asfand when appropriate, but not in every response.`
                                 <span class="mr-4 mt-1 text-indigo-400">${Icons.ai()}</span>
                                 <div>
                                     <h3 class="font-bold text-xl text-indigo-300">AI Analyst Summary</h3>
-                                    <p class="text-indigo-200/80 mt-2">${AI.analyze(App.data.meetingHistory)}</p>
+                                    ${AI.analyze(App.data)}
                                 </div>
                             </div>
                         </div>
