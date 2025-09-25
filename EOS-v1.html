@@ -219,10 +219,10 @@
     </div>
 
     <!-- AI Chat Modal -->
-    <div id="ai-chat-modal" class="hidden fixed bottom-24 right-6 w-[520px] h-[600px] bg-gray-800 rounded-lg shadow-2xl z-50 flex flex-col">
-        <div class="p-4 border-b border-gray-700 flex justify-between items-center">
+    <div id="ai-chat-modal" class="hidden fixed bottom-24 right-6 w-[520px] h-[600px] bg-gradient-to-b from-indigo-900 to-purple-900 rounded-lg shadow-2xl border border-indigo-500/30 z-50 flex flex-col">
+        <div class="p-4 border-b border-indigo-700/50 bg-indigo-800/30 rounded-t-lg flex justify-between items-center">
             <div class="flex items-center space-x-2">
-                <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                 <h3 class="font-bold text-white">Zuma Assistant</h3>
             </div>
             <button id="close-ai-chat" class="text-gray-400 hover:text-white">
@@ -274,7 +274,7 @@
                 }
                 .ai-message-content strong {
                     font-weight: 600;
-                    color: #e5e7eb;
+                    color: #c7d2fe;
                 }
             </style>
             <div class="flex items-start space-x-2">
@@ -283,21 +283,21 @@
                         <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path>
                     </svg>
                 </div>
-                <div class="flex-1 bg-gray-700 rounded-lg p-3">
-                    <p class="text-sm text-gray-300">Hello Asfand! I'm your Zuma Assistant. I can help you analyze meetings, track rocks, and provide insights. How can I help you today?</p>
+                <div class="flex-1 bg-indigo-800/40 backdrop-blur rounded-lg p-3 border border-indigo-600/20">
+                    <p class="text-sm text-indigo-100">Hi! I'm your Zuma Assistant. I can help you analyze meetings, track rocks, and provide insights. How can I help you today?</p>
                 </div>
             </div>
         </div>
 
-        <div class="border-t border-gray-700 p-4">
-            <div class="flex space-x-2 mb-3">
-                <button class="ai-quick-action flex-1 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-2 py-1 rounded" data-action="analyze-meeting">Analyze Last Meeting</button>
-                <button class="ai-quick-action flex-1 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-2 py-1 rounded" data-action="off-track">Show Off-Track</button>
-                <button class="ai-quick-action flex-1 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-2 py-1 rounded" data-action="weekly-report">Weekly Report</button>
+        <div class="border-t border-indigo-700/50 p-4 bg-indigo-900/30">
+            <div class="flex flex-col sm:flex-row gap-2 mb-3">
+                <button class="ai-quick-action flex-1 text-sm font-medium bg-indigo-700 hover:bg-indigo-600 text-white px-3 py-2 rounded-lg transition-colors" data-action="analyze-meeting">📊 Analyze Meeting</button>
+                <button class="ai-quick-action flex-1 text-sm font-medium bg-purple-700 hover:bg-purple-600 text-white px-3 py-2 rounded-lg transition-colors" data-action="off-track">⚠️ Off-Track Rocks</button>
+                <button class="ai-quick-action flex-1 text-sm font-medium bg-pink-700 hover:bg-pink-600 text-white px-3 py-2 rounded-lg transition-colors" data-action="weekly-report">📈 Weekly Report</button>
             </div>
             <div class="flex space-x-2">
-                <input id="ai-chat-input" type="text" class="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:border-indigo-500 focus:outline-none" placeholder="Ask me anything...">
-                <button id="ai-send-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg">
+                <input id="ai-chat-input" type="text" class="flex-1 bg-indigo-950/50 border border-indigo-600/30 rounded-lg px-3 py-2 text-white text-sm focus:border-indigo-400 focus:outline-none placeholder-indigo-300/50" placeholder="Ask me anything...">
+                <button id="ai-send-btn" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white px-4 py-2 rounded-lg transition-all">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
                     </svg>
@@ -895,8 +895,8 @@
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
                             </div>
-                            <div class="flex-1 bg-gray-700 rounded-lg p-3">
-                                <p class="text-sm text-gray-400">Thinking...</p>
+                            <div class="flex-1 bg-indigo-800/40 backdrop-blur rounded-lg p-3 border border-indigo-600/20">
+                                <p class="text-sm text-indigo-200 italic">Thinking...</p>
                             </div>
                         `;
                         messages.appendChild(typingDiv);
@@ -914,27 +914,45 @@
                                         parts: [{
                                             text: `You are Zuma Assistant, an AI assistant for an EOS (Entrepreneurial Operating System) business management platform. The current user is Asfand.
 
-Context about the company:
-- Company: ${App.data.companyName}
-- Employees: ${App.data.employees.length}
-- Departments: ${Object.keys(App.data.departments).join(', ')}
-- Current rocks on track: ${App.data.companyRocks.filter(r => r.status === 'On Track').length}
-- Off-track rocks: ${App.data.companyRocks.filter(r => r.status === 'Off Track').length}
-- Open issues: ${App.data.issues.filter(i => i.status === 'Open').length}
+IMPORTANT CONTEXT - Full Company Data:
+${JSON.stringify({
+    company: App.data.companyName,
+    employees: App.data.employees.map(e => ({name: e.name, role: e.role, department: e.department})),
+    departments: Object.entries(App.data.departments).map(([key, dept]) => ({
+        key,
+        name: dept.name,
+        head: dept.head,
+        members: dept.members,
+        rocks: dept.rocks,
+        issues: dept.issues
+    })),
+    companyRocks: App.data.companyRocks,
+    departmentalRocks: App.data.departmentalRocks || App.data.departmentRocks,
+    individualRocks: App.data.individualRocks,
+    issues: App.data.issues,
+    scorecard: App.data.scorecard,
+    vto: App.data.vto,
+    meetingHistory: App.data.meetingHistory.slice(-5),
+    todos: App.data.todos
+}, null, 2)}
 
 User question: ${userQuery}
 
-Respond in a helpful, professional manner. Format your response using proper HTML tags:
-- Use <p> for paragraphs with proper spacing
-- Use <ul> and <li> for lists
-- Use <strong> for emphasis
-- Use <br> for line breaks where needed
-- Avoid walls of text - break content into readable chunks
-- Start with a greeting using the user's name (Asfand)
-- Keep paragraphs short and scannable
+Response Guidelines:
+- DO NOT start every response with "Hello Asfand" or similar greetings
+- Only use greetings when appropriate (first interaction, or after a long gap)
+- Be direct and get to the point
+- Know the employees by name - for example, Gocha Avsajanishvili is the Tech Lead in Technology department
+- Format your response using proper HTML tags:
+  * Use <p> for paragraphs
+  * Use <ul> and <li> for lists
+  * Use <strong> for emphasis
+  * Use <br> for line breaks where appropriate
+- Keep responses concise and scannable
 - IMPORTANT: Do not wrap response in code blocks or backticks
+- Be specific with data - you have access to all company information
 
-Address the user as Asfand.`
+Address the user as Asfand when appropriate, but not in every response.`
                                         }]
                                     }]
                                 })
@@ -973,8 +991,8 @@ Address the user as Asfand.`
                                             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path>
                                         </svg>
                                     </div>
-                                    <div class="flex-1 bg-gray-700 rounded-lg p-3">
-                                        <div class="text-sm text-gray-300 ai-message-content">${formattedResponse}</div>
+                                    <div class="flex-1 bg-indigo-800/40 backdrop-blur rounded-lg p-3 border border-indigo-600/20">
+                                        <div class="text-sm text-indigo-100 ai-message-content">${formattedResponse}</div>
                                     </div>
                                 `;
                                 messages.appendChild(aiMsg);
@@ -1000,8 +1018,8 @@ Address the user as Asfand.`
                                         <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 818 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path>
                                     </svg>
                                 </div>
-                                <div class="flex-1 bg-gray-700 rounded-lg p-3">
-                                    <div class="text-sm text-gray-300">${fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)]}</div>
+                                <div class="flex-1 bg-indigo-800/40 backdrop-blur rounded-lg p-3 border border-indigo-600/20">
+                                    <div class="text-sm text-indigo-100">${fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)]}</div>
                                 </div>
                             `;
                             messages.appendChild(aiMsg);
