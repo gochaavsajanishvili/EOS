@@ -31,7 +31,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
     *   `#issues`: list with priority/age; add/edit.
     *   `#rocks`: company/department/individual rocks; add via modal.
     *   `#l10`: tabs for Live Meeting and History & AI Insights (summaries, ratings, recordings).
-    *   `#integrations`: placeholder calling `App.integrations()`.
+    *   `#integrations`: placeholder that fetches from `trpc.integrations.list` (stub ok).
 *   Features
     *   AI summaries (dashboard analyst, meeting insights).
     *   Live updates indicator and manual refresh.
@@ -176,6 +176,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
       guards.ts
   /lib
     env.ts
+    sse.ts
     /email
       send.ts
       /templates
@@ -250,7 +251,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 
 ## OUTPUT REQUIREMENTS
 
-1.  Generate `package.json`, `.env.example`, `.gitignore`, `.editorconfig`, `tsconfig.json`, `tailwind.config.ts`, `postcss.config.js`, ESLint + Prettier configs.
+1.  Generate `package.json`, `.env.example`, `.gitignore`, `.editorconfig`, `.nvmrc`, `tsconfig.json`, `tailwind.config.ts`, `postcss.config.js`, ESLint + Prettier configs.
 2.  Scaffold the directory structure exactly as above.
 3.  Normalize the provided Anatomy and Theme into Tailwind tokens and components.
 4.  Include packs: Data & Database, Auth, RBAC, Realtime (SSE), Emails, AI Utilities.
