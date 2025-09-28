@@ -171,6 +171,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
       issues.ts
       rocks.ts
       l10.ts
+      integrations.ts
     /rbac
       roles.ts
       guards.ts
@@ -256,10 +257,10 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 3.  Normalize the provided Anatomy and Theme into Tailwind tokens and components.
 4.  Include packs: Data & Database, Auth, RBAC, Realtime (SSE), Emails, AI Utilities.
 5.  Prisma schema and seed as specified.
-6.  tRPC `appRouter` with `healthcheck`, `whoami`, and routers: `dashboard`, `vto`, `departments`, `people`, `data`, `issues`, `rocks`, `l10`.
+6.  tRPC `appRouter` with `healthcheck`, `whoami`, and routers: `dashboard`, `vto`, `departments`, `people`, `data`, `issues`, `rocks`, `l10`, `integrations`.
 7.  One RHF+Zod form for “Add Rock,” with optimistic UI via React Query.
 8.  Recharts wrappers themed for dark mode (`Line.tsx`, `Spark.tsx`).
-9.  README with exact commands: install, migrate, dev, build, test.
+9.  README with exact commands: install, db:push (dev) / db:migrate (prod), dev, build, test.
 
 ## ACCEPTANCE CRITERIA
 
@@ -278,7 +279,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 
 === CONVERSION_GUIDE ===
 **Input context**
-You are given a single-file HTML/Tailwind/Chart.js SPA (posted below). Convert it to the Universal Foundation stack (Next.js 15 + TS + Tailwind 3.4 + tRPC + Prisma + Recharts + Auth.js v5 + React Query). No experimental flags. No CDN scripts. No inline API keys.
+You are given a single-file HTML/Tailwind/Chart.js SPA (posted below). Convert it to the Universal Foundation stack (Next.js 15 + TS + Tailwind 3.4 + tRPC + Prisma + Recharts + NextAuth v5 + React Query). No experimental flags. No CDN scripts. No inline API keys.
 
 **Hard requirements**
 
