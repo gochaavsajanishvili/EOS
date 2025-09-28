@@ -210,7 +210,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 
 *   Packages: `@prisma/client@5.x`, `prisma@5.x`, `pg@8.x`.
 *   Models:
-    *   Auth: `User`, `Account`, `Session`, `VerificationToken` (Auth.js v5)
+    *   Auth: `User`, `Account`, `Session`, `VerificationToken` (NextAuth v5 / Auth.js)
     *   Domain:
         `Department { id, name, headId, memberCount }`
         `Employee { id, userId, departmentId, role }`
@@ -221,7 +221,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
         `Meeting { id, departmentId?, date, rating, sentiment, summary, notes, recordingUrl }`
 *   Seed: admin user, departments, employees, sample rocks/issues/todos, scorecard time series, two L10 meetings.
 
-### Auth (Auth.js v5 + Prisma adapter)
+### Auth (NextAuth v5 + Prisma adapter)
 
 *   Packages: **`next-auth@5.x`**, **`@auth/prisma-adapter@1.x`**.
 *   Strategy: email magic link (Credentials + OAuth providers are also fine).
@@ -272,6 +272,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 *   SSE indicator shows live connection and updates on events.
 *   V/TO sections save and reload.
 *   Department Detail shows scorecard, rocks, issues, todos, and recent L10 entries with recording links.
+*   No Chart.js bundles appear in the build output.
 
 ---
 
