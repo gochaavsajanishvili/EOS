@@ -79,7 +79,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 
 *   Package manager: **pnpm**
 *   Node: **Node 20 LTS**
-*   Framework: **Next.js 14 (App Router)**
+*   Framework: **Next.js 15 (App Router)**
 *   React: **`react@18.x`**, **`react-dom@18.x`**
 *   Language: **`typescript@5.x`**
 *   CSS: **Tailwind CSS 3.4.x**, **`postcss@8.x`**, **`autoprefixer@10.x`**
@@ -95,7 +95,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 *   Observability: **`@sentry/nextjs@8.x`**
 *   Charts: **Recharts**
 *   ORM: **Prisma**
-*   Auth: **`next-auth@^4.24.x`** with **`@next-auth/prisma-adapter@^1.x`**
+*   Auth: **Auth.js (v5)** with **Prisma adapter**
 
 **Scripts (exact)**
 
@@ -202,7 +202,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 
 *   Packages: `@prisma/client@5.x`, `prisma@5.x`, `pg@8.x`.
 *   Models:
-    *   Auth: `User`, `Account`, `Session`, `VerificationToken` (NextAuth.js v4)
+    *   Auth: `User`, `Account`, `Session`, `VerificationToken` (Auth.js v5)
     *   Domain:
         `Department { id, name, headId, memberCount }`
         `Employee { id, userId, departmentId, role }`
@@ -213,9 +213,9 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
         `Meeting { id, departmentId?, date, rating, sentiment, summary, notes, recordingUrl }`
 *   Seed: admin user, departments, employees, sample rocks/issues/todos, scorecard time series, two L10 meetings.
 
-### Auth (NextAuth.js v4 + Prisma adapter)
+### Auth (Auth.js v5 + Prisma adapter)
 
-*   Packages: **`next-auth@^4.24.x`**, **`@next-auth/prisma-adapter@^1.x`**.
+*   Packages: **Auth.js (v5)**, **Prisma adapter**.
 *   Strategy: email magic link (Credentials + OAuth providers are also fine).
 *   Pages: `/app/(public)/auth/*`. Session in DB; secure cookies; CSRF.
 
@@ -269,12 +269,12 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 
 === CONVERSION_GUIDE ===
 **Input context**
-You are given a single-file HTML/Tailwind/Chart.js SPA (posted below). Convert it to the Universal Foundation stack (Next.js 14 + TS + Tailwind 3.4 + tRPC + Prisma + Recharts + NextAuth.js v4 + React Query). No experimental flags. No CDN scripts. No inline API keys.
+You are given a single-file HTML/Tailwind/Chart.js SPA (posted below). Convert it to the Universal Foundation stack (Next.js 15 + TS + Tailwind 3.4 + tRPC + Prisma + Recharts + Auth.js v5 + React Query). No experimental flags. No CDN scripts. No inline API keys.
 
 **Hard requirements**
 
 1.  **Routing**
-    *   Preserve legacy hash routes by mapping `#/...` → Next routes and updating anchors to `<Link />`. Implement `#dashboard`, `#vto`, `#departments`, `#departments/{id}`, `#people`, `#data`, `#issues`, `#rocks`, `#l10`, `#integrations`.
+    *   Preserve legacy hash routes. Implement `#dashboard`, `#vto`, `#departments`, `#departments/{id}`, `#people`, `#data`, `#issues`, `#rocks`, `#l10`, `#integrations`.
     *   Implement `src/components/layout/HashRouter.tsx` watching `window.location.hash` and rendering matching feature components.
     *   Sidebar links set `location.hash` and highlight the active item.
 
@@ -313,8 +313,8 @@ You are given a single-file HTML/Tailwind/Chart.js SPA (posted below). Convert i
         *   Header dot reflects connection (open/closed).
 
 8.  **AI assistant**
-    *   Remove the hardcoded Gemini endpoint. The API key in the source HTML should be replaced with `YOUR_GEMINI_API_KEY_HERE`.
-    *   Create `src/app/api/ai/route.ts` that reads from `process.env.GOOGLE_API_KEY` and expects a server key at runtime (document this in `.env.example`).
+    *   Strip any inline API keys from the source HTML and route all AI calls through `/api/ai`.
+    *   Create `src/app/api/ai/route.ts` that reads from `process.env.AI_PROVIDER` and `process.env.AI_API_KEY` (document this in `.env.example`).
     *   Client uses a simple chat state; messages are sanitized and rendered via React (no `innerHTML`).
 
 9.  **Security**
@@ -355,5 +355,5 @@ You are given a single-file HTML/Tailwind/Chart.js SPA (posted below). Convert i
 
 **Config & env**
 
-*   Add `.env.example` keys: `DATABASE_URL`, `NEXTAUTH_URL`, `NEXTAUTH_SECRET`, `EMAIL_SERVER_*`, `GOOGLE_API_KEY`.
-*   Never hardcode API keys in the repo. Strip the Gemini key from input.
+*   Add `.env.example` keys: `DATABASE_URL`, `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `EMAIL_SERVER_*`, `AI_PROVIDER`, `AI_API_KEY`.
+*   Never hardcode API keys in the repo. Strip any API keys from input.
