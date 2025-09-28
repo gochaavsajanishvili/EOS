@@ -80,14 +80,14 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 *   Package manager: **pnpm**
 *   Node: **Node 20 LTS** (include `.nvmrc`)
 *   Framework: **Next.js 15 (App Router)**
-*   React: **`react@18.x`**, **`react-dom@18.x`**
+*   React: **`react@19.x`**, **`react-dom@19.x`**
 *   Language: **`typescript@5.x`**
 *   CSS: **Tailwind CSS 3.4.x**, **`postcss@8.x`**, **`autoprefixer@10.x`**
 *   Lint/format: **`eslint@8.x`**, **`eslint-config-next@15.x`**, **`prettier@3.x`**
 *   Icons: **`lucide-react@0.544.0`**
 *   Forms & validation: **`react-hook-form@7.x`**, **`@hookform/resolvers@3.x`**, **`zod@3.x`**
 *   RPC: **`@trpc/server@10.x`**, **`@trpc/react-query@10.x`**
-*   Client data fetching & cache: **`@tanstack/react-query@5.x`**
+*   Client data fetching & cache: **`@tanstack/react-query@5.x`** (ensure @trpc/react-query >= 10.45 for RQ v5 support)
 *   State Management: **Zustand**
 *   Env safety: **`@t3-oss/env-nextjs`**
 *   Testing: **`vitest@1.x`**, **`@testing-library/react@15.x`**, **`@testing-library/jest-dom@6.x`**, **`msw@2.x`**
@@ -95,7 +95,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 *   Observability: **`@sentry/nextjs@8.x`**
 *   Charts: **Recharts** (NO Chart.js - do not include any chart.js packages)
 *   ORM: **Prisma**
-*   Auth: **Auth.js (v5)** with **Prisma adapter**
+*   Auth: **`next-auth@5.x`** with **`@auth/prisma-adapter@1.x`**
 
 **Scripts (exact)**
 
@@ -112,6 +112,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
     "e2e": "playwright test",
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
+    "db:migrate": "prisma migrate deploy",
     "db:studio": "prisma studio"
   }
 }
@@ -127,6 +128,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
         sign-in/page.tsx
         sign-out/page.tsx
     /api
+      /auth/[...nextauth]/route.ts
       /trpc/[trpc]/route.ts
       /sse/route.ts
       /ai/route.ts
@@ -160,7 +162,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
     auth.ts
     trpc.ts
     /routers
-      _app.ts
+      app.ts
       dashboard.ts
       vto.ts
       departments.ts
@@ -197,6 +199,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 *   RBAC checks on server only.
 *   Use `@/*` import alias.
 *   No experimental flags, no CDN script tags.
+*   Tailwind config: `content: ["./src/**/*.{ts,tsx}"]`
 
 ---
 
@@ -219,7 +222,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 
 ### Auth (Auth.js v5 + Prisma adapter)
 
-*   Packages: **Auth.js (v5)**, **Prisma adapter**.
+*   Packages: **`next-auth@5.x`**, **`@auth/prisma-adapter@1.x`**.
 *   Strategy: email magic link (Credentials + OAuth providers are also fine).
 *   Pages: `/app/(public)/auth/*`. Session in DB; secure cookies; CSRF.
 
@@ -231,7 +234,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 ### Realtime (SSE)
 
 *   `/api/sse`: emits `heartbeat` every 20s and `metric:update`, `rock:update`, `issue:update` events.
-*   Client utility with auto-reconnect and backoff; header dot reflects status.
+*   Client utility at `src/lib/sse.ts` with auto-reconnect and backoff; updates Zustand store for connection status; header dot reflects status.
 
 ### Emails (React Email + Nodemailer)
 
@@ -359,5 +362,5 @@ You are given a single-file HTML/Tailwind/Chart.js SPA (posted below). Convert i
 
 **Config & env**
 
-*   Add `.env.example` keys: `DATABASE_URL`, `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `EMAIL_SERVER_*`, `AI_PROVIDER`, `AI_API_KEY`, `USE_MOCK`.
+*   Add `.env.example` keys: `DATABASE_URL`, `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `EMAIL_SERVER_HOST`, `EMAIL_SERVER_PORT`, `EMAIL_SERVER_USER`, `EMAIL_SERVER_PASSWORD`, `EMAIL_FROM`, `AI_PROVIDER`, `AI_API_KEY`, `USE_MOCK`.
 *   Never hardcode API keys in the repo. Strip any API keys from input.
