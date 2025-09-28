@@ -8,7 +8,7 @@
 </html>
 ```
 
-=== UNIVERSAL_PROMPT ===
+=== UNIVERSAL_FOUNDATION ===
 **System intent**
 You are a senior full-stack engineer. Create a production-ready Next.js application that follows the exact foundation and conventions below. Do not use experimental features. Tailwind v3.4 only. Recharts for charts. Given the input anatomy and theme, normalize them to this guide and resolve conflicts in favor of the Universal Foundation.
 
@@ -78,7 +78,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 ## UNIVERSAL FOUNDATION (always include, no substitutions)
 
 *   Package manager: **pnpm**
-*   Node: **Node 20 LTS**
+*   Node: **Node 20 LTS** (include `.nvmrc`)
 *   Framework: **Next.js 15 (App Router)**
 *   React: **`react@18.x`**, **`react-dom@18.x`**
 *   Language: **`typescript@5.x`**
@@ -111,6 +111,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
     "test": "vitest run",
     "e2e": "playwright test",
     "db:push": "prisma db push",
+    "db:seed": "prisma db seed",
     "db:studio": "prisma studio"
   }
 }
