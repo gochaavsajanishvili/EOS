@@ -199,7 +199,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 *   Server logic in Route Handlers or tRPC procedures only.
 *   Zod-validate all external inputs.
 *   RBAC checks on server only.
-*   Use `@/*` import alias.
+*   Use `@/*` import alias (tsconfig.json: `"baseUrl": ".", "paths": { "@/*": ["src/*"] }`).
 *   No experimental flags, no CDN script tags.
 *   Tailwind config: `content: ["./src/**/*.{ts,tsx}"]`
 
@@ -274,6 +274,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 *   V/TO sections save and reload.
 *   Department Detail shows scorecard, rocks, issues, todos, and recent L10 entries with recording links.
 *   No Chart.js bundles appear in the build output.
+*   No console errors in DevTools.
 
 ---
 
@@ -365,5 +366,5 @@ You are given a single-file HTML/Tailwind/Chart.js SPA (posted below). Convert i
 
 **Config & env**
 
-*   Add `.env.example` keys: `DATABASE_URL`, `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `EMAIL_SERVER_HOST`, `EMAIL_SERVER_PORT`, `EMAIL_SERVER_USER`, `EMAIL_SERVER_PASSWORD`, `EMAIL_FROM`, `AI_PROVIDER`, `AI_API_KEY`, `USE_MOCK`.
+*   Add `.env.example` keys: `DATABASE_URL`, `NEXTAUTH_URL`, `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `EMAIL_SERVER_HOST`, `EMAIL_SERVER_PORT`, `EMAIL_SERVER_USER`, `EMAIL_SERVER_PASSWORD`, `EMAIL_FROM`, `AI_PROVIDER`, `AI_API_KEY`, `SENTRY_DSN`, `SENTRY_AUTH_TOKEN` (optional), `USE_MOCK`.
 *   Never hardcode API keys in the repo. Strip any API keys from input.
