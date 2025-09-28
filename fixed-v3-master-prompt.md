@@ -201,7 +201,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 *   RBAC checks on server only.
 *   Use `@/*` import alias (tsconfig.json: `"baseUrl": ".", "paths": { "@/*": ["src/*"] }`).
 *   No experimental flags, no CDN script tags.
-*   Tailwind config: `content: ["./src/**/*.{ts,tsx}"]`
+*   Tailwind config: `darkMode: 'class'`, `content: ["./src/**/*.{ts,tsx}"]`
 
 ---
 
