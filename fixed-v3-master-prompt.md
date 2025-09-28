@@ -83,7 +83,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 *   React: **`react@18.x`**, **`react-dom@18.x`**
 *   Language: **`typescript@5.x`**
 *   CSS: **Tailwind CSS 3.4.x**, **`postcss@8.x`**, **`autoprefixer@10.x`**
-*   Lint/format: **`eslint@8.x`**, **`eslint-config-next@14.x`**, **`prettier@3.x`**
+*   Lint/format: **`eslint@8.x`**, **`eslint-config-next@15.x`**, **`prettier@3.x`**
 *   Icons: **`lucide-react@0.544.0`**
 *   Forms & validation: **`react-hook-form@7.x`**, **`@hookform/resolvers@3.x`**, **`zod@3.x`**
 *   RPC: **`@trpc/server@10.x`**, **`@trpc/react-query@10.x`**
@@ -93,7 +93,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
 *   Testing: **`vitest@1.x`**, **`@testing-library/react@15.x`**, **`@testing-library/jest-dom@6.x`**, **`msw@2.x`**
 *   E2E: **`@playwright/test@1.x`**
 *   Observability: **`@sentry/nextjs@8.x`**
-*   Charts: **Recharts**
+*   Charts: **Recharts** (NO Chart.js - do not include any chart.js packages)
 *   ORM: **Prisma**
 *   Auth: **Auth.js (v5)** with **Prisma adapter**
 
@@ -128,6 +128,7 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
     /api
       /trpc/[trpc]/route.ts
       /sse/route.ts
+      /ai/route.ts
     layout.tsx
     page.tsx
   /components
@@ -151,6 +152,8 @@ You are a senior full-stack engineer. Create a production-ready Next.js applicat
     rocks/
     l10/
     integrations/
+    ai/
+      Assistant.tsx
   /server
     db.ts
     auth.ts
@@ -355,5 +358,5 @@ You are given a single-file HTML/Tailwind/Chart.js SPA (posted below). Convert i
 
 **Config & env**
 
-*   Add `.env.example` keys: `DATABASE_URL`, `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `EMAIL_SERVER_*`, `AI_PROVIDER`, `AI_API_KEY`.
+*   Add `.env.example` keys: `DATABASE_URL`, `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `EMAIL_SERVER_*`, `AI_PROVIDER`, `AI_API_KEY`, `USE_MOCK`.
 *   Never hardcode API keys in the repo. Strip any API keys from input.
